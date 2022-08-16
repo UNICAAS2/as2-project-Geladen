@@ -32,7 +32,7 @@ size_t TrapezoidalMap::insertTrapezoid(const Trapezoid &newTrapezoid){
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::SplitFour(const cg3::Segment2d& segment, const size_t& trapezoid){
+void TrapezoidalMap::splitFour(const cg3::Segment2d& segment, const size_t& trapezoid){
 
     Trapezoid leftTrapezoid = Trapezoid(map[trapezoid].getLeftP(), segment.p1(), map[trapezoid].getTopS(), map[trapezoid].getBottomS());
     Trapezoid rightTrapezoid = Trapezoid(segment.p2(), map[trapezoid].getRightP(), map[trapezoid].getTopS(), map[trapezoid].getBottomS());
@@ -73,7 +73,7 @@ void TrapezoidalMap::SplitFour(const cg3::Segment2d& segment, const size_t& trap
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::SplitTwo(const cg3::Segment2d& segment, const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
+void TrapezoidalMap::splitTwo(const cg3::Segment2d& segment, const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
     Trapezoid topTrapezoid = Trapezoid(map[trapezoid].getLeftP(), map[trapezoid].getRightP(), map[trapezoid].getTopS(), segment);
     Trapezoid bottomTrapezoid = Trapezoid(map[trapezoid].getLeftP(), map[trapezoid].getRightP(), segment, map[trapezoid].getBottomS());
 
@@ -96,7 +96,7 @@ void TrapezoidalMap::SplitTwo(const cg3::Segment2d& segment, const size_t& trape
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::SplitThreeRight(const cg3::Segment2d& segment, const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
+void TrapezoidalMap::splitThreeRight(const cg3::Segment2d& segment, const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
 
     Trapezoid topTrapezoid = Trapezoid(map[trapezoid].getLeftP(), segment.p2(), map[trapezoid].getTopS(), segment);
     Trapezoid bottomTrapezoid = Trapezoid(map[trapezoid].getLeftP(), segment.p2(), segment, map[trapezoid].getBottomS());
@@ -128,7 +128,7 @@ void TrapezoidalMap::SplitThreeRight(const cg3::Segment2d& segment, const size_t
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::SplitThreeLeft(const cg3::Segment2d& segment, const size_t& trapezoid){
+void TrapezoidalMap::splitThreeLeft(const cg3::Segment2d& segment, const size_t& trapezoid){
 
     Trapezoid topTrapezoid = Trapezoid(segment.p1(), map[trapezoid].getRightP(), map[trapezoid].getTopS(), segment);
     Trapezoid bottomTrapezoid = Trapezoid(segment.p1(), map[trapezoid].getRightP(), segment, map[trapezoid].getBottomS());
@@ -144,11 +144,75 @@ void TrapezoidalMap::SplitThreeLeft(const cg3::Segment2d& segment, const size_t&
     bottomTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
     idBottomTrapezoid = insertTrapezoid(bottomTrapezoid);
 
-
-
     LeftTrapezoid.setBottomLeft(map[trapezoid].getBottomLeft());
     LeftTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
     LeftTrapezoid.setTopRight(idTopTrapezoid);
     LeftTrapezoid.setBottomRight(idBottomTrapezoid);
     replaceTrapezoid(trapezoid,LeftTrapezoid);
+}
+
+
+/**
+ * @brief Merge 2 trapezoids
+ * Given two trapezoids the method merge the trapezoids in the left one, updating the map
+ * @param leftTrapezoid, the geometrically leftmost trapezoids.
+ * @param rightTrapezoid, the geometrically rightmost trapezoids.
+ */
+void TrapezoidalMap::mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_t& rightTrapezoid){
+
+    map[leftTrapezoid].setRightP(map[rightTrapezoid].getRightP());
+
+    map[leftTrapezoid].setTopRight(map[rightTrapezoid].getTopRight());
+    map[leftTrapezoid].setBottomRight(map[rightTrapezoid].getBottomRight());
+
+    map[map[rightTrapezoid].getTopRight()].setTopLeft(leftTrapezoid);
+    map[map[rightTrapezoid].getBottomRight()].setBottomLeft(leftTrapezoid);
+}
+
+/**
+ * @brief Merge trapezoids from the vector
+ * Given a vector of trapezoids the method performs all possible merges, updating the map and the input vector
+ * @param trapezoids, the vector that contains all the trapezoids obtained after splits.
+ */
+void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){
+    size_t i =1, k;
+    std::vector<size_t> indexesToUpdate;
+
+    while( i<trapezoids.size() - OFFISIDE_NEXT_TOP ){
+        if(map[trapezoids[i]].getTopRight() == map[trapezoids[i]].getBottomRight()){
+            mergeTwoTrapezoids(trapezoids[i], trapezoids[i + OFFISIDE_NEXT_TOP]);
+            emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_TOP]);
+
+            if(indexesToUpdate.size()-1 == i){
+                indexesToUpdate.push_back(i + OFFISIDE_NEXT_TOP);
+                for(k=0;k<indexesToUpdate.size();k++)
+                    trapezoids[indexesToUpdate[k]] = trapezoids[i];
+            }
+            else{
+                indexesToUpdate.clear();
+                indexesToUpdate.push_back(i);
+                indexesToUpdate.push_back(i + OFFISIDE_NEXT_TOP);
+                for(k=0;k<indexesToUpdate.size();k++)
+                    trapezoids[indexesToUpdate[k]] = trapezoids[i];
+            }
+        }
+        else{
+            mergeTwoTrapezoids(trapezoids[i + OFFISIDE_BOTTOM], trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
+            emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
+
+            if(indexesToUpdate.size()-1 == i + OFFISIDE_BOTTOM){
+                indexesToUpdate.push_back(i + OFFISIDE_NEXT_BOTTOM);
+                for(k=0;k<indexesToUpdate.size();k++)
+                    trapezoids[indexesToUpdate[k]] = trapezoids[i + OFFISIDE_BOTTOM];
+            }
+            else{
+                indexesToUpdate.clear();
+                indexesToUpdate.push_back(i + OFFISIDE_BOTTOM);
+                indexesToUpdate.push_back(i + OFFISIDE_NEXT_BOTTOM);
+                for(k=0;k<indexesToUpdate.size();k++)
+                    trapezoids[indexesToUpdate[k]] = trapezoids[i + OFFISIDE_BOTTOM];
+            }
+        }
+        i+=2;
+    }
 }
