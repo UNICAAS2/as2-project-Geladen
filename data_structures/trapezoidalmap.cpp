@@ -51,8 +51,8 @@ void TrapezoidalMap::splitFour(const cg3::Segment2d& segment, const size_t& trap
     bottomTrapezoid.setBottomLeft(trapezoid);
     topTrapezoid.setTopLeft(trapezoid);
 
-    idBottomTrapezoid = insertTrapezoid(topTrapezoid);
-    idTopTrapezoid = insertTrapezoid(bottomTrapezoid);
+    idTopTrapezoid = insertTrapezoid(topTrapezoid);
+    idBottomTrapezoid = insertTrapezoid(bottomTrapezoid);
 
     map[trapezoid].setBottomRight(idBottomTrapezoid);
     map[trapezoid].setTopRight(idTopTrapezoid);
@@ -65,6 +65,13 @@ void TrapezoidalMap::splitFour(const cg3::Segment2d& segment, const size_t& trap
     map[idTopTrapezoid].setTopRight(idRightTrapezoid);
     map[idBottomTrapezoid].setBottomRight(idRightTrapezoid);
 
+
+    if(rightTrapezoid.getTopRight() != std::numeric_limits<size_t>::max())
+        map[topTrapezoid.getTopRight()].setTopLeft(idRightTrapezoid);
+
+    if(rightTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
+        map[bottomTrapezoid.getBottomRight()].setBottomLeft(idRightTrapezoid);
+
 }
 
 /**
@@ -76,7 +83,7 @@ void TrapezoidalMap::splitFour(const cg3::Segment2d& segment, const size_t& trap
 void TrapezoidalMap::splitTwo(const cg3::Segment2d& segment, const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
     Trapezoid topTrapezoid = Trapezoid(map[trapezoid].getLeftP(), map[trapezoid].getRightP(), map[trapezoid].getTopS(), segment);
     Trapezoid bottomTrapezoid = Trapezoid(map[trapezoid].getLeftP(), map[trapezoid].getRightP(), segment, map[trapezoid].getBottomS());
-
+    size_t idBottomTrapezoid;
 
     topTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
     topTrapezoid.setTopRight(map[trapezoid].getTopRight());
@@ -87,7 +94,24 @@ void TrapezoidalMap::splitTwo(const cg3::Segment2d& segment, const size_t& trape
     bottomTrapezoid.setTopLeft(bottomAdjacent);
 
     replaceTrapezoid(trapezoid, topTrapezoid);
-    insertTrapezoid(bottomTrapezoid);
+    idBottomTrapezoid = insertTrapezoid(bottomTrapezoid);
+
+    if(topAdjacent != std::numeric_limits<size_t>::max()){
+        map[topAdjacent].setBottomRight(trapezoid);
+        map[bottomAdjacent].setTopRight(idBottomTrapezoid);
+    }
+
+    if(topTrapezoid.getTopLeft() != std::numeric_limits<size_t>::max())
+        map[topTrapezoid.getTopLeft()].setTopRight(trapezoid);
+
+    if(bottomTrapezoid.getBottomLeft() != std::numeric_limits<size_t>::max())
+        map[bottomTrapezoid.getBottomLeft()].setBottomRight(idBottomTrapezoid);
+
+    if(topTrapezoid.getTopRight() != std::numeric_limits<size_t>::max())
+        map[topTrapezoid.getTopRight()].setTopLeft(trapezoid);
+
+    if(bottomTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
+        map[bottomTrapezoid.getBottomRight()].setBottomLeft(idBottomTrapezoid);
 }
 
 /**
@@ -120,6 +144,16 @@ void TrapezoidalMap::splitThreeRight(const cg3::Segment2d& segment, const size_t
     rightTrapezoid.setTopRight(map[trapezoid].getTopRight());
     rightTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
     replaceTrapezoid(trapezoid,rightTrapezoid);
+
+    map[topAdjacent].setBottomRight(idTopTrapezoid);
+    map[bottomAdjacent].setTopRight(idBottomTrapezoid);
+
+    if(topTrapezoid.getTopLeft() != std::numeric_limits<size_t>::max())
+        map[topTrapezoid.getTopLeft()].setTopRight(idTopTrapezoid);
+
+    if(bottomTrapezoid.getBottomLeft() != std::numeric_limits<size_t>::max())
+        map[bottomTrapezoid.getBottomLeft()].setBottomRight(idBottomTrapezoid);
+
 }
 
 /**
@@ -149,6 +183,13 @@ void TrapezoidalMap::splitThreeLeft(const cg3::Segment2d& segment, const size_t&
     LeftTrapezoid.setTopRight(idTopTrapezoid);
     LeftTrapezoid.setBottomRight(idBottomTrapezoid);
     replaceTrapezoid(trapezoid,LeftTrapezoid);
+
+
+    if(topTrapezoid.getTopRight() != std::numeric_limits<size_t>::max())
+        map[topTrapezoid.getTopRight()].setTopLeft(idTopTrapezoid);
+
+    if(bottomTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
+        map[bottomTrapezoid.getBottomRight()].setBottomLeft(idBottomTrapezoid);
 }
 
 
@@ -178,12 +219,12 @@ void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){
     size_t i =1, k;
     std::vector<size_t> indexesToUpdate;
 
-    while( i<trapezoids.size() - OFFISIDE_NEXT_TOP ){
+    while( i<trapezoids.size() - 4 ){
         if(map[trapezoids[i]].getTopRight() == map[trapezoids[i]].getBottomRight()){
             mergeTwoTrapezoids(trapezoids[i], trapezoids[i + OFFISIDE_NEXT_TOP]);
             emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_TOP]);
 
-            if(indexesToUpdate.size()-1 == i){
+            if(trapezoids[indexesToUpdate.size()-1] == i){
                 indexesToUpdate.push_back(i + OFFISIDE_NEXT_TOP);
                 for(k=0;k<indexesToUpdate.size();k++)
                     trapezoids[indexesToUpdate[k]] = trapezoids[i];
@@ -200,7 +241,7 @@ void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){
             mergeTwoTrapezoids(trapezoids[i + OFFISIDE_BOTTOM], trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
             emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
 
-            if(indexesToUpdate.size()-1 == i + OFFISIDE_BOTTOM){
+            if(trapezoids[indexesToUpdate.size()-1] == i + OFFISIDE_BOTTOM){
                 indexesToUpdate.push_back(i + OFFISIDE_NEXT_BOTTOM);
                 for(k=0;k<indexesToUpdate.size();k++)
                     trapezoids[indexesToUpdate[k]] = trapezoids[i + OFFISIDE_BOTTOM];
