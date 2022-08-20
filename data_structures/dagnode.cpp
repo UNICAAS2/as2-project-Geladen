@@ -4,6 +4,8 @@ DagNode::DagNode(const size_t& idInfo, const infoType& nodeType)
 {
     info = idInfo;
     type = nodeType;
+    leftChild = std::numeric_limits<size_t>::max();
+    rightChild = std::numeric_limits<size_t>::max();
 }
 
 DagNode::DagNode(const size_t& idInfo, const infoType& nodeType, const size_t& idLeftChild, const size_t& idRightChild)
@@ -13,8 +15,6 @@ DagNode::DagNode(const size_t& idInfo, const infoType& nodeType, const size_t& i
     leftChild = idLeftChild;
     rightChild = idRightChild;
 }
-
-
 
 const size_t& DagNode::getInfo() const{
     return info;

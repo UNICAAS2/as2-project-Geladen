@@ -10,8 +10,8 @@ class DagNode
 {
 
 public:
-    enum infoType {point, segment, trapezoid};
 
+    enum infoType {pointNode, segmentNode, trapezoidNode};
     DagNode(const size_t& idInfo, const infoType& nodeType);
 
     DagNode(const size_t& idInfo, const infoType& nodeType, const size_t& idLeftChild, const size_t& idRightChild);

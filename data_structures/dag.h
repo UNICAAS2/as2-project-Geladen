@@ -11,7 +11,7 @@ private:
 public:
     Dag(const DagNode& firstNode);
     size_t insertNode(const DagNode& newNode);
-
+    void addTwo(const size_t& oldNode, const size_t& idSegment, const size_t& topTrapezoid, const size_t& bottomTrapezoid);
 };
 
 #endif // DAG_H
