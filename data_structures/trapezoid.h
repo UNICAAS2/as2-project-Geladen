@@ -11,10 +11,10 @@ class Trapezoid
 {
 
 private:
-    cg3::Point2d leftP;
-    cg3::Point2d rightP;
-    cg3::Segment2d topS;
-    cg3::Segment2d bottomS;
+    size_t leftP;
+    size_t rightP;
+    size_t topS;
+    size_t bottomS;
     size_t topLeft; // adjacent trapezoid in top left
     size_t bottomLeft; // adjacent trapezoid in bottom left
     size_t topRight; // adjacent trapezoid in top right
@@ -22,17 +22,17 @@ private:
 
 
 public:
-    Trapezoid(const cg3::Point2d& leftp, const cg3::Point2d& rightp,
-              const cg3::Segment2d& tops, const cg3::Segment2d& bottoms);
-    const cg3::Point2d& getLeftP() const;
-    const cg3::Point2d& getRightP() const;
-    const cg3::Segment2d& getTopS() const;
-    const cg3::Segment2d& getBottomS() const;
+    Trapezoid(const size_t& leftp, const size_t& rightp,
+              const size_t& tops, const size_t& bottoms);
+    const size_t& getLeftP() const;
+    const size_t& getRightP() const;
+    const size_t& getTopS() const;
+    const size_t& getBottomS() const;
 
-    void setLeftP(const cg3::Point2d& point);
-    void setRightP(const cg3::Point2d& point);
-    void setTopS(const cg3::Segment2d& segment);
-    void setBottomS(const cg3::Segment2d& segment);
+    void setLeftP(const size_t& point);
+    void setRightP(const size_t& point);
+    void setTopS(const size_t& segment);
+    void setBottomS(const size_t& segment);
 
     const size_t& getTopLeft() const;
     const size_t& getBottomLeft() const;

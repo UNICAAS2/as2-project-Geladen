@@ -1,7 +1,7 @@
 #include "trapezoid.h"
 
-Trapezoid::Trapezoid(const cg3::Point2d& leftp, const cg3::Point2d& rightp,
-                     const cg3::Segment2d& tops, const cg3::Segment2d& bottoms)
+Trapezoid::Trapezoid(const size_t& leftp, const size_t& rightp,
+                     const size_t& tops, const size_t& bottoms)
 {
     leftP = leftp;
     rightP = rightp;
@@ -13,35 +13,35 @@ Trapezoid::Trapezoid(const cg3::Point2d& leftp, const cg3::Point2d& rightp,
     bottomRight = std::numeric_limits<size_t>::max();
 }
 
-const cg3::Point2d& Trapezoid::getLeftP() const{
+const size_t& Trapezoid::getLeftP() const{
     return leftP;
 }
 
-const cg3::Point2d& Trapezoid::getRightP() const{
+const size_t& Trapezoid::getRightP() const{
     return rightP;
 }
 
-const cg3::Segment2d& Trapezoid::getTopS() const{
+const size_t& Trapezoid::getTopS() const{
     return topS;
 }
 
-const cg3::Segment2d& Trapezoid::getBottomS() const{
+const size_t& Trapezoid::getBottomS() const{
     return bottomS;
 }
 
-void Trapezoid::setLeftP(const cg3::Point2d& point){
+void Trapezoid::setLeftP(const size_t& point){
     leftP = point;
 }
 
-void Trapezoid::setRightP(const cg3::Point2d& point){
+void Trapezoid::setRightP(const size_t& point){
     rightP = point;
 }
 
-void Trapezoid::setTopS(const cg3::Segment2d& segment){
+void Trapezoid::setTopS(const size_t& segment){
     topS = segment;
 }
 
-void Trapezoid::setBottomS(const cg3::Segment2d& segment){
+void Trapezoid::setBottomS(const size_t& segment){
     bottomS = segment;
 }
 
