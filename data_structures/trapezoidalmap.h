@@ -28,6 +28,9 @@ public:
     size_t insertSegment(const cg3::Segment2d& newSegment);
     size_t insertTrapezoid(const Trapezoid& newTrapezoid);
     void replaceTrapezoid(const size_t& oldTrapezoid, const Trapezoid& newTrapezoid);
+    const cg3::Point2d getPoint(const size_t& idPoint) const;
+    const cg3::Segment2d getSegment(const size_t& idSegment) const;
+    const Trapezoid getTrapezoid(const size_t& idTrapezoid) const;
 
     void splitFour(const size_t& trapezoid);
     void splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent);

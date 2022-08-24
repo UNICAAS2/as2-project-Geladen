@@ -37,6 +37,20 @@ void TrapezoidalMap::replaceTrapezoid(const size_t &oldTrapezoid, const Trapezoi
     map[oldTrapezoid] = newTrapezoid;
 }
 
+
+const cg3::Point2d TrapezoidalMap::getPoint(const size_t& idPoint) const{
+    return points[idPoint];
+}
+
+const cg3::Segment2d TrapezoidalMap::getSegment(const size_t& idSegment) const{
+    return segments[idSegment];
+}
+
+const Trapezoid TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
+    return map[idTrapezoid];
+}
+
+
 size_t TrapezoidalMap::insertPoint(const cg3::Point2d& newPoint){
     points.push_back(newPoint);
     return points.size()-1;
@@ -168,7 +182,7 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
     Trapezoid bottomTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP2, idSegment, map[trapezoid].getBottomS());
     Trapezoid rightTrapezoid = Trapezoid(idP2, map[trapezoid].getRightP(), map[trapezoid].getTopS(), map[trapezoid].getBottomS());
 
-    size_t idBottomTrapezoid, idTopTrapezoid, idRightTrapezoid;
+    size_t idBottomTrapezoid, idTopTrapezoid;
 
     topTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
     topTrapezoid.setBottomLeft(topAdjacent);
@@ -214,7 +228,7 @@ void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid){
     Trapezoid bottomTrapezoid = Trapezoid(idP1, map[trapezoid].getRightP(), idSegment, map[trapezoid].getBottomS());
     Trapezoid LeftTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP1, map[trapezoid].getTopS(), map[trapezoid].getBottomS());
 
-    size_t idBottomTrapezoid, idTopTrapezoid, idLeftTrapezoid;
+    size_t idBottomTrapezoid, idTopTrapezoid;
 
     topTrapezoid.setTopLeft(trapezoid);
     topTrapezoid.setTopRight(map[trapezoid].getTopRight());
