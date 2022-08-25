@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
     map.insertPoint(punto2);
     map.insertSegment(s1);
 
-    map.splitFour( idtrap);
+    std::vector<size_t> newTrapezoids;
+    map.splitFour(idtrap, newTrapezoids);
 
     map.insertPoint(punto3);
     map.insertPoint(punto4);

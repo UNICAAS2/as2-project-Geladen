@@ -46,7 +46,7 @@ const cg3::Segment2d TrapezoidalMap::getSegment(const size_t& idSegment) const{
     return segments[idSegment];
 }
 
-const Trapezoid TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
+Trapezoid TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
     return map[idTrapezoid];
 }
 
@@ -66,13 +66,25 @@ size_t TrapezoidalMap::insertTrapezoid(const Trapezoid& newTrapezoid){
     return map.size()-1;
 }
 
+size_t TrapezoidalMap::getMapSize(){
+    return map.size();
+}
+
+size_t TrapezoidalMap::getSegmentsSize(){
+    return segments.size();
+}
+
+size_t TrapezoidalMap::getPointsSize(){
+    return points.size();
+}
+
 /**
  * @brief Split a trapezoid into four new trapezoids
  * Given a new segment and the id of a trapezoid in the Trapezoidal Map returns four new trapezoids: left, right, top, bottom
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::splitFour(const size_t& trapezoid){
+void TrapezoidalMap::splitFour(const size_t& trapezoid, std::vector<size_t>& trapezoids){
 
     size_t idP1,idP2, idSegment;
 
@@ -97,8 +109,12 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid){
     bottomTrapezoid.setBottomLeft(trapezoid);
     topTrapezoid.setTopLeft(trapezoid);
 
+    trapezoids.push_back(trapezoid); //pusha l'id nel vettore da rendere
+
     idTopTrapezoid = insertTrapezoid(topTrapezoid);
     idBottomTrapezoid = insertTrapezoid(bottomTrapezoid);
+    trapezoids.push_back(idTopTrapezoid);
+    trapezoids.push_back(idBottomTrapezoid);
 
     map[trapezoid].setBottomRight(idBottomTrapezoid);
     map[trapezoid].setTopRight(idTopTrapezoid);
@@ -107,6 +123,7 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid){
     rightTrapezoid.setTopLeft(idTopTrapezoid);
 
     idRightTrapezoid = insertTrapezoid(rightTrapezoid);
+    trapezoids.push_back(idRightTrapezoid);
 
     map[idTopTrapezoid].setTopRight(idRightTrapezoid);
     map[idBottomTrapezoid].setBottomRight(idRightTrapezoid);

@@ -11,6 +11,7 @@ Trapezoid::Trapezoid(const size_t& leftp, const size_t& rightp,
     bottomLeft = std::numeric_limits<size_t>::max();
     topRight = std::numeric_limits<size_t>::max();
     bottomRight = std::numeric_limits<size_t>::max();
+    idDag = std::numeric_limits<size_t>::max();
 }
 
 const size_t& Trapezoid::getLeftP() const{
@@ -75,5 +76,13 @@ void Trapezoid::setTopRight(const size_t& trapezoid){
 
 void Trapezoid::setBottomRight(const size_t& trapezoid){
     bottomRight = trapezoid;
+}
+
+const size_t& Trapezoid::getIdDag() const{
+    return idDag;
+}
+
+void Trapezoid::setIdDag(const size_t& id){
+    idDag = id;
 }
 

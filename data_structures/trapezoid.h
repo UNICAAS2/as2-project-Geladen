@@ -20,6 +20,8 @@ private:
     size_t topRight; // adjacent trapezoid in top right
     size_t bottomRight; // adjacent trapezoid in bottom right
 
+    size_t idDag;
+
 
 public:
     Trapezoid(const size_t& leftp, const size_t& rightp,
@@ -43,6 +45,9 @@ public:
     void setBottomLeft(const size_t& trapezoid);
     void setTopRight(const size_t& trapezoid);
     void setBottomRight(const size_t& trapezoid);
+
+    const size_t& getIdDag() const;
+    void setIdDag(const size_t& id);
 
 };
 
