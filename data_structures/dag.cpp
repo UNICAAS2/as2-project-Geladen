@@ -10,7 +10,7 @@ size_t Dag::insertNode(const DagNode& newNode){
     return dag.size()-1;
 }
 
-DagNode Dag::getNode(const size_t& node) const{
+const DagNode Dag::getNode(const size_t& node) const{
     return dag[node];
 }
 

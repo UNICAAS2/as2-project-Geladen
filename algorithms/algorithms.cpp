@@ -88,6 +88,7 @@ void updateMapAndDag(TrapezoidalMap& map,  Dag& dag, const cg3::Segment2d newSeg
             else{
 
                 // split2
+                //addTwoInDag();
             }
 
         }
@@ -102,6 +103,8 @@ void addFourInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const si
     idSegment = map.getSegmentsSize()-1;
     idP1 = map.getPointsSize()-2;
     idP2 = map.getMapSize()-1;
+
+    map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
 
     DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
     DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
@@ -135,14 +138,98 @@ void addTwoInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const siz
 
     idSegment = map.getSegmentsSize()-1;
 
+    map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
+
+    DagNode segmentNode = DagNode(idSegment, DagNode::segmentNode);
+
+    if(map.getTrapezoid(topTrapezoid).getIdDag() == std::numeric_limits<size_t>::max()){
+        DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+        idTopTrapezoid = dag.insertNode(topTrapezoidNode);
+        segmentNode.setLeftChild(idTopTrapezoid);
+    }
+    else
+        segmentNode.setLeftChild(map.getTrapezoid(topTrapezoid).getIdDag());
+
+    if(map.getTrapezoid(bottomTrapezoid).getIdDag() == std::numeric_limits<size_t>::max()){
+        DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+        idBottomTrapezoid = dag.insertNode(bottomTrapezoidNode);
+        segmentNode.setRightChild(idBottomTrapezoid);
+    }
+    else
+        segmentNode.setRightChild(map.getTrapezoid(bottomTrapezoid).getIdDag());
+
+    dag.replaceNode(oldNode,segmentNode);
+
+    map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
+    map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
+}
+
+
+void addThreeLInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& leftTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+
+    size_t idSegment, idP1, idSegmentNode, idLeftTrapezoid, idTopTrapezoid, idBottomTrapezoid;
+
+    idSegment = map.getSegmentsSize()-1;
+    idP1 = map.getPointsSize()-2;
+
+    map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
+
     DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
     DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
     idTopTrapezoid = dag.insertNode(topTrapezoidNode);
     idBottomTrapezoid = dag.insertNode(bottomTrapezoidNode);
 
     DagNode segmentNode = DagNode(idSegment, DagNode::segmentNode,idTopTrapezoid,idBottomTrapezoid);
-    dag.replaceNode(oldNode,segmentNode);
+    idSegmentNode = dag.insertNode(segmentNode);
 
+    DagNode leftTrapezoidNode = DagNode(leftTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+    idLeftTrapezoid = dag.insertNode(leftTrapezoidNode);
+
+    DagNode p1Node = DagNode(idP1, DagNode::pointNode,idLeftTrapezoid,idSegmentNode);
+    dag.replaceNode(oldNode,p1Node);
+
+    map.getTrapezoid(leftTrapezoid).setIdDag(idLeftTrapezoid);
+    map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
+    map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
+}
+
+
+void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& rightTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+
+    size_t idSegment, idP2, idSegmentNode, idLeftTrapezoid, idRightTrapezoid, idTopTrapezoid, idBottomTrapezoid;
+
+    idSegment = map.getSegmentsSize()-1;
+    idP2 = map.getMapSize()-1;
+
+    map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
+
+    DagNode segmentNode = DagNode(idSegment, DagNode::segmentNode);
+
+    if(map.getTrapezoid(topTrapezoid).getIdDag() == std::numeric_limits<size_t>::max()){
+        DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+        idTopTrapezoid = dag.insertNode(topTrapezoidNode);
+        segmentNode.setLeftChild(idTopTrapezoid);
+    }
+    else
+        segmentNode.setLeftChild(map.getTrapezoid(topTrapezoid).getIdDag());
+
+    if(map.getTrapezoid(bottomTrapezoid).getIdDag() == std::numeric_limits<size_t>::max()){
+        DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+        idBottomTrapezoid = dag.insertNode(bottomTrapezoidNode);
+        segmentNode.setRightChild(idBottomTrapezoid);
+    }
+    else
+        segmentNode.setRightChild(map.getTrapezoid(bottomTrapezoid).getIdDag());
+
+    idSegmentNode = dag.insertNode(segmentNode);
+
+    DagNode rightTrapezoidNode = DagNode(rightTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
+    idRightTrapezoid = dag.insertNode(rightTrapezoidNode);
+
+    DagNode p2Node = DagNode(idP2, DagNode::pointNode,idSegmentNode,idRightTrapezoid);
+    dag.replaceNode(oldNode,p2Node);
+
+    map.getTrapezoid(rightTrapezoid).setIdDag(idLeftTrapezoid);
     map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
     map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
 }

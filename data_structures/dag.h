@@ -11,7 +11,7 @@ private:
 public:
     Dag(const DagNode& firstNode);
     size_t insertNode(const DagNode& newNode);
-    DagNode getNode(const size_t& node) const;
+    const DagNode getNode(const size_t& node) const;
     const std::vector<DagNode>& getDag() const;
     size_t replaceNode(const size_t& oldNode, const DagNode& newNode);
     //void addTwo(const size_t& oldNode, const size_t& idSegment, const size_t& topTrapezoid, const size_t& bottomTrapezoid);
