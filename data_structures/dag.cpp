@@ -18,6 +18,6 @@ const std::vector<DagNode>& Dag::getDag() const {
     return dag;
 }
 
-size_t Dag::replaceNode(const size_t& oldNode, const DagNode& newNode){
+void Dag::replaceNode(const size_t& oldNode, const DagNode& newNode){
     dag[oldNode] = newNode;
 }

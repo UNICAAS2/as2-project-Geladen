@@ -30,15 +30,16 @@ public:
     void replaceTrapezoid(const size_t& oldTrapezoid, const Trapezoid& newTrapezoid);
     const cg3::Point2d getPoint(const size_t& idPoint) const;
     const cg3::Segment2d getSegment(const size_t& idSegment) const;
-    Trapezoid getTrapezoid(const size_t& idTrapezoid) const;
+    Trapezoid& getTrapezoid(const size_t& idTrapezoid);
+    const Trapezoid getTrapezoid(const size_t& idTrapezoid) const;
     size_t getMapSize();
     size_t getSegmentsSize();
     size_t getPointsSize();
 
     void splitFour(const size_t& trapezoid, std::vector<size_t>& trapezoids);
-    void splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent);
-    void splitThreeLeft(const size_t& trapezoid);
-    void splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent);
+    void splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent, std::vector<size_t>& trapezoids);
+    void splitThreeLeft(const size_t& trapezoid, std::vector<size_t>& trapezoids);
+    void splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent, std::vector<size_t>& trapezoids);
     void mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_t& rightTrapezoid);
     void mergeTrapezoids(std::vector<size_t>& trapezoids);
 };

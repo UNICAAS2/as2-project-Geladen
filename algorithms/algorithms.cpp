@@ -5,7 +5,7 @@ void followSegment(const TrapezoidalMap& map, const Dag& dag, const cg3::Segment
 
     size_t idTrapezoid;
     idTrapezoid = search(map,dag,segment.p1(),segment.p2());
-
+    trapezoids.push_back(idTrapezoid);
 
     while(segment.p2().x() > map.getPoint(map.getTrapezoid(idTrapezoid).getRightP()).x()){
 
@@ -40,16 +40,16 @@ size_t search(const TrapezoidalMap& map, const Dag& dag, const cg3::Point2d& poi
             if(segment.p1().operator == (point) || segment.p2().operator == (point)){ // se `e sovrapposto al segmento
 
                 if(cg3::isPointAtLeft(segment.p1(),segment.p2(),point2))
-                    node = dag.getNode(node.getRightChild());
-                else
                     node = dag.getNode(node.getLeftChild());
+                else
+                    node = dag.getNode(node.getRightChild());
             }
             else{
 
                 if(cg3::isPointAtLeft(segment.p1(),segment.p2(),point))
-                    node = dag.getNode(node.getRightChild());
-                else
                     node = dag.getNode(node.getLeftChild());
+                else
+                    node = dag.getNode(node.getRightChild());
             }
         }
     }
@@ -67,42 +67,88 @@ void updateMapAndDag(TrapezoidalMap& map,  Dag& dag, const cg3::Segment2d newSeg
     idP2 = map.insertPoint(newSegment.p2());
     followSegment(map, dag, newSegment, trapezoids);
 
-    if(trapezoids.size() == 1){ //segment inside one trapezoid -> split4
-        map.splitFour(trapezoids[0], newTrapezoids);
-        addFourInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0],newTrapezoids[1],newTrapezoids[2],newTrapezoids[3]);
+    if(trapezoids.size() == 1){ //segment inside one trapezoid
+
+        if(map.getPoint(map.getTrapezoid(trapezoids[0]).getLeftP()).x() == newSegment.p1().x()){
+
+            if(map.getPoint(map.getTrapezoid(trapezoids[0]).getRightP()).x() == newSegment.p2().x()){
+
+                map.splitTwo(trapezoids[0], std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), newTrapezoids);
+                addTwoInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0],newTrapezoids[1]);
+            }
+            else{
+                map.splitThreeRight(trapezoids[0], std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), newTrapezoids);
+                addThreeRInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0],newTrapezoids[1],newTrapezoids[2]);
+
+            }
+        }
+        else if(map.getPoint(map.getTrapezoid(trapezoids[0]).getRightP()).x() == newSegment.p2().x()){
+            map.splitThreeLeft(trapezoids[0], newTrapezoids);
+            addThreeLInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0],newTrapezoids[1],newTrapezoids[2]);
+        }
+        else{
+            map.splitFour(trapezoids[0], newTrapezoids);
+            addFourInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0],newTrapezoids[1],newTrapezoids[2],newTrapezoids[3]);
+        }
     }
     else{
 
-        size_t i=0;
-        while(true){ // finche ci sono elementi nel vettore?
-
-            if (newSegment.p1().x() != map.getPoint(map.getTrapezoid(trapezoids[0]).getLeftP()).x()){
-
-                //split3 sinistra
-
-            }
-            else if(newSegment.p2().x() != map.getPoint(map.getTrapezoid(trapezoids.size()-1).getRightP()).x()){
-
-                //spit 3 a destra
-            }
-            else{
-
-                // split2
-                //addTwoInDag();
-            }
-
+        if(map.getPoint(map.getTrapezoid(trapezoids[0]).getLeftP()).x() == newSegment.p1().x()){
+            newTrapezoids.push_back(std::numeric_limits<size_t>::max());
+            map.splitTwo(trapezoids[0], std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max(), newTrapezoids);
         }
+        else
+            map.splitThreeLeft(trapezoids[0],newTrapezoids);
+
+        size_t i=1;
+        while(i < trapezoids.size()-1){ // finche ci sono elementi nel vettore?
+            map.splitTwo(trapezoids[i],newTrapezoids[newTrapezoids.size()-2],newTrapezoids[newTrapezoids.size()-1], newTrapezoids);
+            i++;
+        }
+
+        if(map.getPoint(map.getTrapezoid(trapezoids[trapezoids.size()-1]).getRightP()).x() == newSegment.p2().x()){
+            map.splitTwo(trapezoids[i],newTrapezoids[newTrapezoids.size()-2],newTrapezoids[newTrapezoids.size()-1], newTrapezoids);
+            newTrapezoids.push_back(std::numeric_limits<size_t>::max());
+        }
+        else
+            map.splitThreeRight(trapezoids[trapezoids.size()-1], newTrapezoids[newTrapezoids.size()-2], newTrapezoids[newTrapezoids.size()-1], newTrapezoids);
+
+
+
+        map.mergeTrapezoids(newTrapezoids);
+
+        if(newTrapezoids[0] == std::numeric_limits<size_t>::max())
+            addTwoInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[1],newTrapezoids[2]);
+        else
+            addThreeLInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[0], newTrapezoids[1],newTrapezoids[2]);
+
+        i=3;
+        while(i < newTrapezoids.size()-3){
+            addTwoInDag(map,dag,map.getTrapezoid(trapezoids[i/2]).getIdDag(),newTrapezoids[i],newTrapezoids[i+1]);
+            i+=2;
+        }
+
+        if(newTrapezoids[newTrapezoids.size()-1] == std::numeric_limits<size_t>::max())
+
+            addTwoInDag(map,dag,map.getTrapezoid(trapezoids[trapezoids.size()-1]).getIdDag(),newTrapezoids[newTrapezoids.size()-3],newTrapezoids[newTrapezoids.size()-2]);
+        else
+            addThreeRInDag(map,dag,map.getTrapezoid(trapezoids[trapezoids.size()-1]).getIdDag(),newTrapezoids[newTrapezoids.size()-3], newTrapezoids[newTrapezoids.size()-2],newTrapezoids[newTrapezoids.size()-1]);
+
+
     }
+
+    trapezoids.clear();
+    newTrapezoids.clear();
 
 }
 
-void addFourInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& leftTrapezoid, const size_t& rightTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+void addFourInDag(TrapezoidalMap& map, Dag& dag, const size_t oldNode, const size_t& leftTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid, const size_t& rightTrapezoid){
 
     size_t idSegment, idP1, idP2, idSegmentNode, idP2Node, idLeftTrapezoid, idRightTrapezoid, idTopTrapezoid, idBottomTrapezoid;
 
     idSegment = map.getSegmentsSize()-1;
     idP1 = map.getPointsSize()-2;
-    idP2 = map.getMapSize()-1;
+    idP2 = map.getPointsSize()-1;
 
     map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
 
@@ -124,7 +170,7 @@ void addFourInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const si
     idLeftTrapezoid = dag.insertNode(leftTrapezoidNode);
 
     DagNode p1Node = DagNode(idP1, DagNode::pointNode,idLeftTrapezoid,idP2Node);
-    dag.replaceNode(oldNode,p1Node);
+    dag.replaceNode(oldNode, p1Node);
 
     map.getTrapezoid(leftTrapezoid).setIdDag(idLeftTrapezoid);
     map.getTrapezoid(rightTrapezoid).setIdDag(idRightTrapezoid);
@@ -132,7 +178,7 @@ void addFourInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const si
     map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
 }
 
-void addTwoInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+void addTwoInDag(TrapezoidalMap& map, Dag& dag, const size_t oldNode, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
 
     size_t idSegment, idTopTrapezoid, idBottomTrapezoid;
 
@@ -146,6 +192,7 @@ void addTwoInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const siz
         DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
         idTopTrapezoid = dag.insertNode(topTrapezoidNode);
         segmentNode.setLeftChild(idTopTrapezoid);
+        map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
     }
     else
         segmentNode.setLeftChild(map.getTrapezoid(topTrapezoid).getIdDag());
@@ -154,18 +201,17 @@ void addTwoInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const siz
         DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
         idBottomTrapezoid = dag.insertNode(bottomTrapezoidNode);
         segmentNode.setRightChild(idBottomTrapezoid);
+        map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
     }
     else
         segmentNode.setRightChild(map.getTrapezoid(bottomTrapezoid).getIdDag());
 
     dag.replaceNode(oldNode,segmentNode);
 
-    map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
-    map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
 }
 
 
-void addThreeLInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& leftTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+void addThreeLInDag(TrapezoidalMap& map, Dag& dag, const size_t oldNode, const size_t& leftTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
 
     size_t idSegment, idP1, idSegmentNode, idLeftTrapezoid, idTopTrapezoid, idBottomTrapezoid;
 
@@ -194,12 +240,12 @@ void addThreeLInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const 
 }
 
 
-void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const size_t& rightTrapezoid, const size_t& topTrapezoid, const size_t& bottomTrapezoid){
+void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t oldNode, const size_t& topTrapezoid, const size_t& bottomTrapezoid, const size_t& rightTrapezoid){
 
     size_t idSegment, idP2, idSegmentNode, idLeftTrapezoid, idRightTrapezoid, idTopTrapezoid, idBottomTrapezoid;
 
     idSegment = map.getSegmentsSize()-1;
-    idP2 = map.getMapSize()-1;
+    idP2 = map.getPointsSize()-1;
 
     map.getTrapezoid(dag.getNode(oldNode).getInfo()).setIdDag(std::numeric_limits<size_t>::max());
 
@@ -209,6 +255,7 @@ void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const 
         DagNode topTrapezoidNode = DagNode(topTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
         idTopTrapezoid = dag.insertNode(topTrapezoidNode);
         segmentNode.setLeftChild(idTopTrapezoid);
+        map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
     }
     else
         segmentNode.setLeftChild(map.getTrapezoid(topTrapezoid).getIdDag());
@@ -217,6 +264,7 @@ void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const 
         DagNode bottomTrapezoidNode = DagNode(bottomTrapezoid, DagNode::trapezoidNode, std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
         idBottomTrapezoid = dag.insertNode(bottomTrapezoidNode);
         segmentNode.setRightChild(idBottomTrapezoid);
+        map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
     }
     else
         segmentNode.setRightChild(map.getTrapezoid(bottomTrapezoid).getIdDag());
@@ -229,7 +277,5 @@ void addThreeRInDag(TrapezoidalMap& map, Dag& dag, const size_t& oldNode, const 
     DagNode p2Node = DagNode(idP2, DagNode::pointNode,idSegmentNode,idRightTrapezoid);
     dag.replaceNode(oldNode,p2Node);
 
-    map.getTrapezoid(rightTrapezoid).setIdDag(idLeftTrapezoid);
-    map.getTrapezoid(topTrapezoid).setIdDag(idTopTrapezoid);
-    map.getTrapezoid(bottomTrapezoid).setIdDag(idBottomTrapezoid);
+    map.getTrapezoid(rightTrapezoid).setIdDag(idRightTrapezoid);
 }

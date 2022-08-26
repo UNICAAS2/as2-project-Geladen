@@ -25,6 +25,7 @@ TrapezoidalMap::TrapezoidalMap()
     idBottomS = insertSegment(bottomS);
 
     Trapezoid boundingBox = Trapezoid(idP1,idP4,idTopS,idBottomS);
+    boundingBox.setIdDag(0);
 
     map.push_back(boundingBox);
 }
@@ -46,10 +47,13 @@ const cg3::Segment2d TrapezoidalMap::getSegment(const size_t& idSegment) const{
     return segments[idSegment];
 }
 
-Trapezoid TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
+Trapezoid& TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid){
     return map[idTrapezoid];
 }
 
+const Trapezoid TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
+    return map[idTrapezoid];
+}
 
 size_t TrapezoidalMap::insertPoint(const cg3::Point2d& newPoint){
     points.push_back(newPoint);
@@ -101,6 +105,7 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid, std::vector<size_t>& tra
 
     leftTrapezoid.setBottomLeft(map[trapezoid].getBottomLeft());
     leftTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
+    leftTrapezoid.setIdDag(map[trapezoid].getIdDag());
     rightTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
     rightTrapezoid.setTopRight(map[trapezoid].getTopRight());
 
@@ -130,10 +135,10 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid, std::vector<size_t>& tra
 
 
     if(rightTrapezoid.getTopRight() != std::numeric_limits<size_t>::max())
-        map[topTrapezoid.getTopRight()].setTopLeft(idRightTrapezoid);
+        map[rightTrapezoid.getTopRight()].setTopLeft(idRightTrapezoid);
 
     if(rightTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
-        map[bottomTrapezoid.getBottomRight()].setBottomLeft(idRightTrapezoid);
+        map[rightTrapezoid.getBottomRight()].setBottomLeft(idRightTrapezoid);
 
 }
 
@@ -143,7 +148,7 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid, std::vector<size_t>& tra
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
+void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent, std::vector<size_t>& trapezoids){
 
     size_t idSegment;
 
@@ -156,6 +161,8 @@ void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent
     topTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
     topTrapezoid.setTopRight(map[trapezoid].getTopRight());
     topTrapezoid.setBottomLeft(topAdjacent);
+    topTrapezoid.setIdDag(map[trapezoid].getIdDag());
+
 
     bottomTrapezoid.setBottomLeft(map[trapezoid].getBottomLeft());
     bottomTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
@@ -180,6 +187,9 @@ void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent
 
     if(bottomTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
         map[bottomTrapezoid.getBottomRight()].setBottomLeft(idBottomTrapezoid);
+
+    trapezoids.push_back(trapezoid);
+    trapezoids.push_back(idBottomTrapezoid);
 }
 
 /**
@@ -188,7 +198,7 @@ void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent){
+void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent, std::vector<size_t>& trapezoids){
 
     size_t idP2, idSegment;
 
@@ -215,6 +225,8 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
     rightTrapezoid.setTopLeft(idTopTrapezoid);
     rightTrapezoid.setTopRight(map[trapezoid].getTopRight());
     rightTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
+    rightTrapezoid.setIdDag(map[trapezoid].getIdDag());
+
     replaceTrapezoid(trapezoid,rightTrapezoid);
 
     map[topAdjacent].setBottomRight(idTopTrapezoid);
@@ -226,6 +238,9 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
     if(bottomTrapezoid.getBottomLeft() != std::numeric_limits<size_t>::max())
         map[bottomTrapezoid.getBottomLeft()].setBottomRight(idBottomTrapezoid);
 
+    trapezoids.push_back(idTopTrapezoid);
+    trapezoids.push_back(idBottomTrapezoid);
+    trapezoids.push_back(trapezoid);
 }
 
 /**
@@ -234,7 +249,7 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid){
+void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid, std::vector<size_t>& trapezoids){
 
     size_t idP1, idSegment;
 
@@ -243,7 +258,7 @@ void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid){
 
     Trapezoid topTrapezoid = Trapezoid(idP1, map[trapezoid].getRightP(), map[trapezoid].getTopS(), idSegment);
     Trapezoid bottomTrapezoid = Trapezoid(idP1, map[trapezoid].getRightP(), idSegment, map[trapezoid].getBottomS());
-    Trapezoid LeftTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP1, map[trapezoid].getTopS(), map[trapezoid].getBottomS());
+    Trapezoid leftTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP1, map[trapezoid].getTopS(), map[trapezoid].getBottomS());
 
     size_t idBottomTrapezoid, idTopTrapezoid;
 
@@ -255,18 +270,23 @@ void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid){
     bottomTrapezoid.setBottomRight(map[trapezoid].getBottomRight());
     idBottomTrapezoid = insertTrapezoid(bottomTrapezoid);
 
-    LeftTrapezoid.setBottomLeft(map[trapezoid].getBottomLeft());
-    LeftTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
-    LeftTrapezoid.setTopRight(idTopTrapezoid);
-    LeftTrapezoid.setBottomRight(idBottomTrapezoid);
-    replaceTrapezoid(trapezoid,LeftTrapezoid);
+    leftTrapezoid.setBottomLeft(map[trapezoid].getBottomLeft());
+    leftTrapezoid.setTopLeft(map[trapezoid].getTopLeft());
+    leftTrapezoid.setTopRight(idTopTrapezoid);
+    leftTrapezoid.setBottomRight(idBottomTrapezoid);
+    leftTrapezoid.setIdDag(map[trapezoid].getIdDag());
 
+    replaceTrapezoid(trapezoid,leftTrapezoid);
 
     if(topTrapezoid.getTopRight() != std::numeric_limits<size_t>::max())
         map[topTrapezoid.getTopRight()].setTopLeft(idTopTrapezoid);
 
     if(bottomTrapezoid.getBottomRight() != std::numeric_limits<size_t>::max())
         map[bottomTrapezoid.getBottomRight()].setBottomLeft(idBottomTrapezoid);
+
+    trapezoids.push_back(trapezoid);
+    trapezoids.push_back(idTopTrapezoid);
+    trapezoids.push_back(idBottomTrapezoid);
 }
 
 
@@ -286,7 +306,8 @@ void TrapezoidalMap::mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_
     size_t index = map[rightTrapezoid].getTopRight();
     map[index].setTopLeft(leftTrapezoid);
 
-    map[map[rightTrapezoid].getBottomRight()].setBottomLeft(leftTrapezoid);
+    if(map[rightTrapezoid].getBottomRight() != std::numeric_limits<size_t>::max())
+        map[map[rightTrapezoid].getBottomRight()].setBottomLeft(leftTrapezoid);
 }
 
 /**
