@@ -5,7 +5,10 @@
 
 
 /**
-  * @brief This class represents the trapezoids that will compose the trapzoidal map
+  * @brief This class represents the trapezoids that will compose the trapzoidal. A trapezoid is composed by two points leftP and rightP,
+  * two segments topS and topS, each trapezoid can have zero to four neighbors topLeft bottomLeft topRoght bottomRight. All the attributes
+  * that make up the class are of type size_t which represent the indices of the elements stored in the TrapezoidalMap.
+  * In addition, the class contains a index, idDag, representing the position of the trapezoid in the dag.
   */
 class Trapezoid
 {

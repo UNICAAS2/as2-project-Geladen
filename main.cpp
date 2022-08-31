@@ -19,9 +19,9 @@ int main(int argc, char *argv[]) {
     cg3::Point2d punto5(3,3);
     cg3::Point2d punto6(9,8);
     cg3::Segment2d s3(punto5, punto6);
-    cg3::Point2d punto7(4,2);
+    //cg3::Point2d punto7(4,2);
     //cg3::Point2d punto8(6,3);
-    cg3::Segment2d s4(punto7, punto2);
+    cg3::Segment2d s4(punto3, punto1);
 
     TrapezoidalMap map = TrapezoidalMap();
     DagNode dnode= DagNode(0,DagNode::trapezoidNode,std::numeric_limits<size_t>::max(),std::numeric_limits<size_t>::max());
