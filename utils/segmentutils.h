@@ -1,0 +1,4 @@
+#ifndef SEGMENTUTILS_H
+#define SEGMENTUTILS_H
+
+#endif // SEGMENTUTILS_H
