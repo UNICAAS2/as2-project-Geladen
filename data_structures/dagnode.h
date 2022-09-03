@@ -4,8 +4,11 @@
 
 
 /**
-  * @brief This class represents the node that will compose the Dag
+  * @brief This class represents the node that will compose the Dag. A node is composed by an information field that represent the index of
+  * the object stored in the trapezoidal map, a field type that is usefull to check the type of the node object, two indices used like pointers
+  * leftChild and rightChild which indicate the position of the left and right child of the node in the Dag.
   */
+
 class DagNode
 {
 
