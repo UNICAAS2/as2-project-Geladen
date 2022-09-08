@@ -3,7 +3,7 @@
 
 /**
  * @brief DAG's contructor
- * @param DagNode firstNode, the root node of the DAG
+ * @param firstNode, the root node of the DAG
  */
 Dag::Dag(const DagNode& firstNode)
 { 
@@ -12,7 +12,7 @@ Dag::Dag(const DagNode& firstNode)
 
 /**
  * @brief Insert a node of the DAG
- * @param DagNode newNode, the new node to be inserted in the DAG
+ * @param newNode, the new node to be inserted in the DAG
  * @return the ID of the new Node in the DAG
  */
 size_t Dag::insertNode(const DagNode& newNode){
@@ -22,7 +22,7 @@ size_t Dag::insertNode(const DagNode& newNode){
 
 /**
  * @brief Return a node of the DAG as a reference
- * @param size_t node, the id of the node in the DAG
+ * @param node, the id of the node in the DAG
  */
 const DagNode& Dag::getNode(const size_t& node) const{
     return dag[node];
@@ -37,8 +37,8 @@ const std::vector<DagNode>& Dag::getDag() const {
 
 /**
  * @brief Replace the node in a certain position in the DAG
- * @param size_t oldNode, the id of the node to be replaced
- * @param DagNode newNode, the new node to be inserted in the DAG
+ * @param oldNode, the id of the node to be replaced
+ * @param newNode, the new node to be inserted in the DAG
  */
 void Dag::replaceNode(const size_t& oldNode, const DagNode& newNode){
     dag[oldNode] = newNode;

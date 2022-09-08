@@ -7,7 +7,6 @@
  * @param tops, the top segment of the trapezoid
  * @param bottoms, the bottom segment of the trapezoid
  */
-
 Trapezoid::Trapezoid(const size_t& leftp, const size_t& rightp,
                      const size_t& tops, const size_t& bottoms)
 {

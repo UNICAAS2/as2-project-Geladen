@@ -1,6 +1,8 @@
 #include "trapezoidalmap.h"
 
-
+/**
+ * @brief TrapezoidalMap's contructor.
+ */
 TrapezoidalMap::TrapezoidalMap()
 {
     size_t idP1, idP2, idP3, idP4, idTopS, idBottomS;
@@ -37,7 +39,6 @@ const std::vector<Trapezoid>& TrapezoidalMap::getMap() const {
 void TrapezoidalMap::replaceTrapezoid(const size_t &oldTrapezoid, const Trapezoid &newTrapezoid){
     map[oldTrapezoid] = newTrapezoid;
 }
-
 
 const cg3::Point2d& TrapezoidalMap::getPoint(const size_t& idPoint) const{
     return points[idPoint];

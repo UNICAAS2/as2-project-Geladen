@@ -3,6 +3,9 @@
 #include "data_structures/dagnode.h"
 #include <cg3/geometry/point2.h>
 
+/**
+  * @brief This class represents the Dag structure. The structure is composed by a vectore of DagNode.
+  */
 class Dag
 {
 private:
