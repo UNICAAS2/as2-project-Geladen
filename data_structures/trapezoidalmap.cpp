@@ -32,26 +32,60 @@ TrapezoidalMap::TrapezoidalMap()
     map.push_back(boundingBox);
 }
 
+/**
+ * @brief Set the newTrapezoid vector with the lastest added or modified trapezoids
+ * @param trapezoids, the last added or modified trapezoids
+ */
+void TrapezoidalMap::setNewTrapezoids(std::vector<size_t> trapezoids){
+
+    for(size_t i=0;i<trapezoids.size();i++){
+        if(trapezoids[i] != std::numeric_limits<size_t>::max())
+            newTrapezoids.push_back(trapezoids[i]);
+    }
+}
+
+
 const std::vector<Trapezoid>& TrapezoidalMap::getMap() const {
     return map;
 }
 
+/**
+ * @brief Replace a trapedoid in the map with a new one
+ * @param oldTtrapezoid, the id of the trapazoid to be replaced
+ * @param newTrapezoid, the trapezoid to be inserted in the map
+ */
 void TrapezoidalMap::replaceTrapezoid(const size_t &oldTrapezoid, const Trapezoid &newTrapezoid){
     map[oldTrapezoid] = newTrapezoid;
 }
 
+/**
+ * @brief Return the point as a reference
+ * @param idPoint, the id of the point
+ */
 const cg3::Point2d& TrapezoidalMap::getPoint(const size_t& idPoint) const{
     return points[idPoint];
 }
 
+/**
+ * @brief Return the segment as a reference
+ * @param idSegment, the id of the segment
+ */
 const cg3::Segment2d& TrapezoidalMap::getSegment(const size_t& idSegment) const{
     return segments[idSegment];
 }
 
+/**
+ * @brief Return the trapezoid as a reference
+ * @param idTrapezoid, the id of the trapezoid
+ */
 Trapezoid& TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid){
     return map[idTrapezoid];
 }
 
+/**
+ * @brief Return the trapezoid as a reference
+ * @param idTrapezoid, the id of the trapezoid
+ */
 const Trapezoid& TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
     return map[idTrapezoid];
 }
@@ -72,6 +106,11 @@ size_t TrapezoidalMap::insertPoint(const cg3::Point2d& newPoint){
     }
 }
 
+/**
+ * @brief Insert a new segment into the vector of segments
+ * @param newSegment, the new segment to insert
+ * @return the index of the segment in the vector
+ */
 size_t TrapezoidalMap::insertSegment(const cg3::Segment2d& newSegment){
     segments.push_back(newSegment);
     return segments.size()-1;
@@ -93,14 +132,24 @@ size_t TrapezoidalMap::insertTrapezoid(const Trapezoid& newTrapezoid){
     }
 }
 
+
+/**
+ * @brief Return the size of the vector of trapezoids
+ */
 size_t TrapezoidalMap::getMapSize() const{
     return map.size();
 }
 
+/**
+ * @brief Return the size of the vector of segments
+ */
 size_t TrapezoidalMap::getSegmentsSize() const{
     return segments.size();
 }
 
+/**
+ * @brief Return the size of the vector of points
+ */
 size_t TrapezoidalMap::getPointsSize() const{
     return points.size();
 }
@@ -314,8 +363,7 @@ void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid, std::vector<size_t>
 
 
 /**
- * @brief Merge 2 trapezoids
- * Given two trapezoids the method merge the trapezoids in the left one, updating the map
+ * @brief Given two trapezoids the method merges the trapezoids in the left one, updating the map
  * @param leftTrapezoid, the geometrically leftmost trapezoids.
  * @param rightTrapezoid, the geometrically rightmost trapezoids.
  */
@@ -334,8 +382,7 @@ void TrapezoidalMap::mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_
 }
 
 /**
- * @brief Merge trapezoids from the vector
- * Given a vector of trapezoids the method performs all possible merges, updating the map and the input vector
+ * @brief Given a vector of trapezoids the method performs all possible merges, updating the map and the input vector
  * @param trapezoids, the vector that contains all the trapezoids obtained after splits.
  */
 void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){

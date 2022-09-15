@@ -20,6 +20,7 @@ private:
     std::vector<cg3::Segment2d> segments;
     std::vector<Trapezoid> map;
     std::vector<size_t> emptyIndexes;
+    std::vector<size_t> newTrapezoids;
 
     std::unordered_map<cg3::Point2d, size_t> pointMap;
 
@@ -38,6 +39,8 @@ public:
     size_t getMapSize() const;
     size_t getSegmentsSize() const;
     size_t getPointsSize() const;
+
+    void setNewTrapezoids(std::vector<size_t> trapezoids);
 
     void splitFour(const size_t& trapezoid, std::vector<size_t>& trapezoids, const size_t& idP1, const size_t& idP2);
     void splitTwo(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent, std::vector<size_t>& trapezoids);

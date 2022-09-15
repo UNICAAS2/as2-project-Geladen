@@ -2,6 +2,10 @@
 #define DRAWABLEPOLYGON_H
 
 #include <cg3/geometry/point2.h>
+#include <cg3/utilities/color.h>
+
+
+#include <random>
 
 
 /**
@@ -30,7 +34,7 @@ private:
     cg3::Point2d topRightPoint;
     cg3::Point2d bottomRightPoint;
     bool isTrapezoid;
-
+    cg3::Color color;
 };
 
 #endif // DRAWABLEPOLYGON_H

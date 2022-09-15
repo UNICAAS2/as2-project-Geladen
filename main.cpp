@@ -7,6 +7,7 @@
 #include "algorithms/algorithms.h"
 #include <cg3/geometry/point2.h>
 #include <cg3/geometry/segment2.h>
+using namespace Algorithms;
 
 int main(int argc, char *argv[]) {
 
@@ -27,10 +28,10 @@ int main(int argc, char *argv[]) {
     DagNode dnode= DagNode(0,DagNode::trapezoidNode,std::numeric_limits<size_t>::max(),std::numeric_limits<size_t>::max());
     Dag dag = Dag(dnode);
 
-    updateMapAndDag(map,dag,s1);
-    updateMapAndDag(map,dag,s2);
-    updateMapAndDag(map,dag,s3);
-    updateMapAndDag(map,dag,s4);
+    //updateMapAndDag(map,dag,s1);
+    //updateMapAndDag(map,dag,s2);
+    //updateMapAndDag(map,dag,s3);
+    //updateMapAndDag(map,dag,s4);
 
     CG3_SUPPRESS_WARNING(argc);
     CG3_SUPPRESS_WARNING(argv);

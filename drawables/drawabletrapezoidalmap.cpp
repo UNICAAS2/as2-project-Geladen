@@ -2,11 +2,14 @@
 
 DrawableTrapezoidalMap::DrawableTrapezoidalMap()
 {
+
+    TrapezoidalMap();
 }
 
 void DrawableTrapezoidalMap::draw() const {
 
 }
+
 
 cg3::Point3d DrawableTrapezoidalMap::sceneCenter() const{
     const cg3::BoundingBox2& boundingBox = cg3::BoundingBox2();
