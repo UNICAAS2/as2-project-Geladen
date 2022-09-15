@@ -4,8 +4,7 @@
 #include <unordered_map>
 #include "trapezoid.h"
 
-#define MAX_DOUBLE std::numeric_limits<double>::max()
-#define MIN_DOUBLE std::numeric_limits<double>::min()
+#define BOUNDINGBOX 1e+6
 #define OFFISIDE_NEXT_TOP 2
 #define OFFISIDE_NEXT_BOTTOM 3
 #define OFFISIDE_BOTTOM 1
@@ -15,13 +14,14 @@
   */
 class TrapezoidalMap
 {
-private:
+protected:
     std::vector<cg3::Point2d> points;
     std::vector<cg3::Segment2d> segments;
     std::vector<Trapezoid> map;
     std::vector<size_t> emptyIndexes;
     std::vector<size_t> newTrapezoids;
 
+private:
     std::unordered_map<cg3::Point2d, size_t> pointMap;
 
 public:

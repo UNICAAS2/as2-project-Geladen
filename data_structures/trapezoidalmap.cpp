@@ -10,10 +10,10 @@ TrapezoidalMap::TrapezoidalMap()
     segments = std::vector<cg3::Segment2d>();
     map = std::vector<Trapezoid>();
 
-    cg3::Point2d p1 = cg3::Point2d(MIN_DOUBLE, MAX_DOUBLE);
-    cg3::Point2d p2 = cg3::Point2d(MIN_DOUBLE, MAX_DOUBLE);
-    cg3::Point2d p3 = cg3::Point2d(MIN_DOUBLE, MIN_DOUBLE);
-    cg3::Point2d p4 = cg3::Point2d(MAX_DOUBLE, MIN_DOUBLE);
+    cg3::Point2d p1 = cg3::Point2d(-BOUNDINGBOX, BOUNDINGBOX);
+    cg3::Point2d p2 = cg3::Point2d(BOUNDINGBOX, BOUNDINGBOX);
+    cg3::Point2d p3 = cg3::Point2d(-BOUNDINGBOX, -BOUNDINGBOX);
+    cg3::Point2d p4 = cg3::Point2d(BOUNDINGBOX, -BOUNDINGBOX);
 
     cg3::Segment2d topS = cg3::Segment2d(p1, p2);
     cg3::Segment2d bottomS = cg3::Segment2d(p3, p4);
@@ -54,7 +54,7 @@ const std::vector<Trapezoid>& TrapezoidalMap::getMap() const {
  * @param oldTtrapezoid, the id of the trapazoid to be replaced
  * @param newTrapezoid, the trapezoid to be inserted in the map
  */
-void TrapezoidalMap::replaceTrapezoid(const size_t &oldTrapezoid, const Trapezoid &newTrapezoid){
+void TrapezoidalMap::replaceTrapezoid(const size_t& oldTrapezoid, const Trapezoid &newTrapezoid){
     map[oldTrapezoid] = newTrapezoid;
 }
 

@@ -5,8 +5,9 @@
  * @brief DAG's contructor
  * @param firstNode, the root node of the DAG
  */
-Dag::Dag(const DagNode& firstNode)
+Dag::Dag()
 { 
+    DagNode firstNode = DagNode(0,DagNode::trapezoidNode,std::numeric_limits<size_t>::max(),std::numeric_limits<size_t>::max());
     dag.push_back(firstNode);
 }
 

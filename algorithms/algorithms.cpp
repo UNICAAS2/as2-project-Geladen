@@ -143,7 +143,7 @@ void updateMapAndDag(TrapezoidalMap& map,  Dag& dag, const cg3::Segment2d newSeg
     }
 
     trapezoids.clear();
-    newTrapezoids.clear();
+    //newTrapezoids.clear();
 
 }
 

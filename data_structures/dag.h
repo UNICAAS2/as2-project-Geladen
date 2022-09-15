@@ -12,7 +12,7 @@ private:
     std::vector<DagNode> dag;
 
 public:
-    Dag(const DagNode& firstNode);
+    Dag();
     size_t insertNode(const DagNode& newNode);
     const DagNode& getNode(const size_t& node) const;
     const std::vector<DagNode>& getDag() const;

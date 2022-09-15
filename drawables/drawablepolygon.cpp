@@ -8,15 +8,15 @@
  * @param bottomRight, the bottom right point of the polygon
  * @param trapezoid, a boolean that indicates whether this polygon is a trapezoid or a triangle
  */
-DrawablePolygon::DrawablePolygon(const cg3::Point2d& topLeft,const cg3::Point2d& bottomLeft,const cg3::Point2d& topRight,const cg3::Point2d& bottomRight, const bool trapezoid)
+DrawablePolygon::DrawablePolygon(const cg3::Point2d& topLeft,const cg3::Point2d& bottomLeft,const cg3::Point2d& topRight,const cg3::Point2d& bottomRight)
 {
     std::mt19937 rng;
 
     topLeftPoint = topLeft;
-    bottomLeftPoint= bottomLeft;
+    bottomLeftPoint = bottomLeft;
     topRightPoint = topRight;
     bottomRightPoint = bottomRight;
-    isTrapezoid = trapezoid;
+    isDeleted = false;
 
     rng.seed(std::random_device()());
     std::uniform_real_distribution<double> dist(0,255);
@@ -52,6 +52,16 @@ const cg3::Point2d& DrawablePolygon::getBottomRightPoint() const{
 }
 
 
+const cg3::Color& DrawablePolygon::getColor() const{
+    return color;
+}
+
+
+bool DrawablePolygon::getIsDeleted() const{
+    return isDeleted;
+}
+
+
 /**
  * @brief Set the top left point of the polygon
  */
@@ -78,4 +88,8 @@ void DrawablePolygon::setTopRightPoint(const cg3::Point2d& point){
  */
 void DrawablePolygon::setBottomRightPoint(const cg3::Point2d& point){
     bottomRightPoint = point;
+}
+
+void DrawablePolygon::setIsDeleted(const bool& flag){
+    isDeleted = flag;
 }
