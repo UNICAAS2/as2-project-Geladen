@@ -22,6 +22,14 @@ void followSegment(const TrapezoidalMap& map, const Dag& dag, const cg3::Segment
     }
 }
 
+/**
+ * @brief Searche which trapezoid an input point belongs to
+ * @param map, the trapezoidal map (vector of trapezoids)
+ * @param dag, the dag in which perform the search
+ * @param point, the point to be searched
+ * @param point2, the second point of a segment, it is useful if the first point is equal to a point in the dag
+ * @return the index of the trapzoid found in the trapezoidal map
+ */
 size_t search(const TrapezoidalMap& map, const Dag& dag, const cg3::Point2d& point, const cg3::Point2d& point2){
 
     DagNode node = dag.getNode(0);

@@ -5,9 +5,9 @@
 #include "trapezoid.h"
 
 #define BOUNDINGBOX 1e+6
-#define OFFISIDE_NEXT_TOP 2
-#define OFFISIDE_NEXT_BOTTOM 3
-#define OFFISIDE_BOTTOM 1
+#define OFFSIDE_NEXT_TOP 2
+#define OFFSIDE_NEXT_BOTTOM 3
+#define OFFSIDE_BOTTOM 1
 
 /**
   * @brief This class implemets the trapezoidal map as a vector of trapezoids

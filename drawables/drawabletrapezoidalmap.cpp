@@ -8,6 +8,7 @@ DrawableTrapezoidalMap::DrawableTrapezoidalMap()
     TrapezoidalMap();
     polygons = std::vector<DrawablePolygon>();
     polygons.push_back(DrawablePolygon(points[0],points[1],points[2],points[3]));
+    selectedPolygon = std::numeric_limits<size_t>::max();
 
 }
 
@@ -17,21 +18,40 @@ DrawableTrapezoidalMap::DrawableTrapezoidalMap()
 void DrawableTrapezoidalMap::draw() const{
 
         for (size_t i=0;i<polygons.size();i++) {
-            if(polygons[i].getIsDeleted() == false){
-                if(polygons[i].getTopLeftPoint() == polygons[i].getBottomLeftPoint()){
-                    cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getColor(),1,true);
-                    cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
-                }else if(polygons[i].getTopRightPoint() == polygons[i].getBottomRightPoint()){
-                    cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
-                    cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
-                }else{
-                    cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
-                    cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
-                    cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+
+            if(i == selectedPolygon){
+                if(polygons[i].getIsDeleted() == false){
+                    if(polygons[i].getTopLeftPoint() == polygons[i].getBottomLeftPoint()){
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                    }else if(polygons[i].getTopRightPoint() == polygons[i].getBottomRightPoint()){
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                    }else{
+                        cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                    }
+                }
+            }
+            else{
+                if(polygons[i].getIsDeleted() == false){
+                    if(polygons[i].getTopLeftPoint() == polygons[i].getBottomLeftPoint()){
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getColor(),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                    }else if(polygons[i].getTopRightPoint() == polygons[i].getBottomRightPoint()){
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                    }else{
+                        cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                    }
                 }
             }
         }
 }
+
 /**
  * @brief the vector of DrawablePolygons is updated with the new points calculated after inserting a new segment
  */
@@ -110,8 +130,12 @@ const cg3::Point2d DrawableTrapezoidalMap::calculatePoint(const double x, const 
     return cg3::Point2d(roundValue(x),roundValue(y));
 }
 
-void DrawableTrapezoidalMap::highlightPolygon(const size_t idPolygon){
-    polygons[idPolygon].setColor(cg3::Color(0,0,0));
+/**
+ * @brief Set the id of the polygon that the user selected with the query point
+ * @param idPolygon, the id of the selected polygon
+ */
+void DrawableTrapezoidalMap::setSelectedPolygon(const size_t idPolygon){
+    selectedPolygon = idPolygon;
 }
 
 /**

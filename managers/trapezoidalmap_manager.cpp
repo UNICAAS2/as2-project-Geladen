@@ -66,7 +66,7 @@ TrapezoidalMapManager::TrapezoidalMapManager(QWidget *parent) :
     //The mainWindow will take care of rendering the bounding box and the selected point
     mainWindow.pushDrawableObject(&drawableBoundingBox, "Bounding box");
     mainWindow.pushDrawableObject(&drawableTrapezoidalMapDataset, "Segments");
-    mainWindow.pushDrawableObject(&trapezoidalMap,"TGrazpedoizadfcj");
+    mainWindow.pushDrawableObject(&trapezoidalMap,"Trapezoids");
 
 
 
@@ -217,8 +217,7 @@ void TrapezoidalMapManager::addSegmentToTrapezoidalMap(const cg3::Segment2d& seg
 void TrapezoidalMapManager::queryTrapezoidalMap(const cg3::Point2d& queryPoint)
 {
     size_t selectedTrapezoid = Algorithms::search(trapezoidalMap,dag,queryPoint,queryPoint);
-    trapezoidalMap.highlightPolygon(selectedTrapezoid);
-
+    trapezoidalMap.setSelectedPolygon(selectedTrapezoid);
     //---------------------------------------------------------------------
     //Execute the point location algorithm of your TrapezoidalMap to locate in which trapezoid
     //the point is contained.

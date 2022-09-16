@@ -17,6 +17,7 @@ class DrawableTrapezoidalMap : public TrapezoidalMap, public cg3::DrawableObject
 
 private:
     std::vector<DrawablePolygon> polygons;
+    size_t selectedPolygon;
 
 public:
     DrawableTrapezoidalMap();
@@ -27,8 +28,9 @@ public:
     const cg3::Point2d calculatePoint(const double x, const cg3::Segment2d& segment) const;
     void update();
     void clear();
-    void highlightPolygon(const size_t idPolygon);
     double roundValue(const double x) const;
+
+    void setSelectedPolygon(const size_t idPolygon);
 };
 
 

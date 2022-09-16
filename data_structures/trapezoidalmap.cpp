@@ -44,7 +44,9 @@ void TrapezoidalMap::setNewTrapezoids(std::vector<size_t> trapezoids){
     }
 }
 
-
+/**
+ * @brief Return the vector of trapzoids as a reference
+ */
 const std::vector<Trapezoid>& TrapezoidalMap::getMap() const {
     return map;
 }
@@ -90,6 +92,11 @@ const Trapezoid& TrapezoidalMap::getTrapezoid(const size_t& idTrapezoid) const{
     return map[idTrapezoid];
 }
 
+/**
+ * @brief Insert a new point in the vector of points if it isn't alredy present
+ * @param newPoint, the new point to be inserted
+ * @return the position of the new point in the vector of points
+ */
 size_t TrapezoidalMap::insertPoint(const cg3::Point2d& newPoint){
 
     std::unordered_map<cg3::Point2d, size_t>::iterator it = pointMap.find(newPoint);
@@ -116,6 +123,11 @@ size_t TrapezoidalMap::insertSegment(const cg3::Segment2d& newSegment){
     return segments.size()-1;
 }
 
+/**
+ * @brief Insert a new trapezoid in the vector of trapezoid at the end of the vector if there aren't free indexes
+ * @param newTrapezoid, the new trapezoid to be inserted
+ * @return the position of the new trapezoid in the vector of trapezoids
+ */
 size_t TrapezoidalMap::insertTrapezoid(const Trapezoid& newTrapezoid){
 
     size_t index;
@@ -164,8 +176,6 @@ void TrapezoidalMap::splitFour(const size_t& trapezoid, std::vector<size_t>& tra
 
     size_t idSegment;
 
-    //idP1 = points.size()-2;
-    //idP2 = points.size()-1;
     idSegment = segments.size()-1;
 
     Trapezoid leftTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP1, map[trapezoid].getTopS(), map[trapezoid].getBottomS());
@@ -393,18 +403,18 @@ void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){
 
     while( i<trapezoids.size() - 4 ){
         if(map[trapezoids[i]].getTopRight() == map[trapezoids[i]].getBottomRight()){
-            mergeTwoTrapezoids(trapezoids[i], trapezoids[i + OFFISIDE_NEXT_TOP]);
-            emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_TOP]);
+            mergeTwoTrapezoids(trapezoids[i], trapezoids[i + OFFSIDE_NEXT_TOP]);
+            emptyIndexes.push_back(trapezoids[i + OFFSIDE_NEXT_TOP]);
 
-            trapezoids[i + OFFISIDE_NEXT_TOP] = trapezoids[i];
+            trapezoids[i + OFFSIDE_NEXT_TOP] = trapezoids[i];
         }
         else{
-            mergeTwoTrapezoids(trapezoids[i + OFFISIDE_BOTTOM], trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
-            emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
+            mergeTwoTrapezoids(trapezoids[i + OFFSIDE_BOTTOM], trapezoids[i + OFFSIDE_NEXT_BOTTOM]);
+            emptyIndexes.push_back(trapezoids[i + OFFSIDE_NEXT_BOTTOM]);
 
-            trapezoids[i + OFFISIDE_NEXT_BOTTOM] = trapezoids[i + OFFISIDE_BOTTOM];
+            trapezoids[i + OFFSIDE_NEXT_BOTTOM] = trapezoids[i + OFFSIDE_BOTTOM];
         }
-        i+=OFFISIDE_NEXT_TOP;
+        i += OFFSIDE_NEXT_TOP;
     }
 }
 

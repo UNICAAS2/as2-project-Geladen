@@ -19,7 +19,7 @@ DrawablePolygon::DrawablePolygon(const cg3::Point2d& topLeft,const cg3::Point2d&
     isDeleted = false;
 
     rng.seed(std::random_device()());
-    std::uniform_real_distribution<double> dist(0,255);
+    std::uniform_real_distribution<double> dist(0,244);
     color = cg3::Color(dist(rng),dist(rng),dist(rng));
 }
 
@@ -51,15 +51,23 @@ const cg3::Point2d& DrawablePolygon::getBottomRightPoint() const{
     return bottomRightPoint;
 }
 
-
+/**
+ * @brief Return the color of the polygon as a reference
+ */
 const cg3::Color& DrawablePolygon::getColor() const{
     return color;
 }
 
+/**
+ * @brief Set the color of the polygon
+ */
 void DrawablePolygon::setColor(const cg3::Color& newColor){
     color = newColor;
 }
 
+/**
+ * @brief Return the flag to to check if the polygon has been deleted
+ */
 bool DrawablePolygon::getIsDeleted() const{
     return isDeleted;
 }
@@ -93,6 +101,9 @@ void DrawablePolygon::setBottomRightPoint(const cg3::Point2d& point){
     bottomRightPoint = point;
 }
 
+/**
+ * @brief Set the flag to to check if the polygon has been deleted
+ */
 void DrawablePolygon::setIsDeleted(const bool& flag){
     isDeleted = flag;
 }

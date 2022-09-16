@@ -45,6 +45,9 @@ void Dag::replaceNode(const size_t& oldNode, const DagNode& newNode){
     dag[oldNode] = newNode;
 }
 
+/**
+ * @brief Clear the vector of nodes
+ */
 void Dag::clear(){
     dag.clear();
 }
