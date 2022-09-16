@@ -32,6 +32,7 @@ public:
     void setBottomLeftPoint(const cg3::Point2d& point);
     void setTopRightPoint(const cg3::Point2d& point);
     void setBottomRightPoint(const cg3::Point2d& point);
+    void setColor(const cg3::Color& newColor);
     void setIsDeleted(const bool& flag);
 
 

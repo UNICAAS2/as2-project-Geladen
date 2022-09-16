@@ -166,7 +166,6 @@ void TrapezoidalMapManager::addSegmentToTrapezoidalMap(const cg3::Segment2d& seg
 {
     Algorithms::updateMapAndDag(trapezoidalMap,dag,SegmentUtils::sortSegment(segment));
     trapezoidalMap.update();
-    updateCanvas();
 
     //---------------------------------------------------------------------
     //Execute the incremental step to add a segment to your output TrapezoidalMap data
@@ -218,6 +217,7 @@ void TrapezoidalMapManager::addSegmentToTrapezoidalMap(const cg3::Segment2d& seg
 void TrapezoidalMapManager::queryTrapezoidalMap(const cg3::Point2d& queryPoint)
 {
     size_t selectedTrapezoid = Algorithms::search(trapezoidalMap,dag,queryPoint,queryPoint);
+    trapezoidalMap.highlightPolygon(selectedTrapezoid);
 
     //---------------------------------------------------------------------
     //Execute the point location algorithm of your TrapezoidalMap to locate in which trapezoid
@@ -265,7 +265,7 @@ void TrapezoidalMapManager::queryTrapezoidalMap(const cg3::Point2d& queryPoint)
 
     //You can delete this line after you implement the algorithm: it is
     //just needed to suppress the unused-variable warning
-    CG3_SUPPRESS_WARNING(queryPoint);
+    //CG3_SUPPRESS_WARNING(queryPoint);
 }
 
 /**
@@ -275,7 +275,11 @@ void TrapezoidalMapManager::clearTrapezoidalMap()
 {
     //---------------------------------------------------------------------
     //Clear here your trapezoidal map data structure.
+    dag.clear();
+    trapezoidalMap.clear();
 
+    trapezoidalMap = DrawableTrapezoidalMap();
+    dag = Dag();
 
 
     //#####################################################################

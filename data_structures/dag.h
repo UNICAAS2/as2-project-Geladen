@@ -17,6 +17,7 @@ public:
     const DagNode& getNode(const size_t& node) const;
     const std::vector<DagNode>& getDag() const;
     void replaceNode(const size_t& oldNode, const DagNode& newNode);
+    void clear();
 };
 
 #endif // DAG_H

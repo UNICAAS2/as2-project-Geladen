@@ -48,6 +48,8 @@ public:
     void splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent, std::vector<size_t>& trapezoids, const size_t& idP2);
     void mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_t& rightTrapezoid);
     void mergeTrapezoids(std::vector<size_t>& trapezoids);
+
+    void clear();
 };
 
 #endif // TRAPEZOIDALMAP_H

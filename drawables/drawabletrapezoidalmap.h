@@ -8,6 +8,10 @@
 #include "algorithms/algorithms.h"
 #include <cg3/viewer/opengl_objects/opengl_objects2.h>
 
+
+/**
+ * @brief This class manages the graphic part of the trapezoidal map
+ */
 class DrawableTrapezoidalMap : public TrapezoidalMap, public cg3::DrawableObject
 {
 
@@ -20,9 +24,11 @@ public:
     void draw() const;
     cg3::Point3d sceneCenter() const;
     double sceneRadius() const;
-    //void replacePolygon(const size_t& oldPolygon, const DrawablePolygon& newPolygon);
     const cg3::Point2d calculatePoint(const double x, const cg3::Segment2d& segment) const;
     void update();
+    void clear();
+    void highlightPolygon(const size_t idPolygon);
+    double roundValue(const double x) const;
 };
 
 

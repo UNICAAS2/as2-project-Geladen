@@ -270,7 +270,7 @@ void TrapezoidalMap::splitTwo(const size_t& trapezoid, const size_t& topAdjacent
  * @param segment, the new segment inserted.
  * @param trapezoid, id of the trapezoid that contains the new segment.
  */
-void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t&  bottomAdjacent, std::vector<size_t>& trapezoids, const size_t& idP2){
+void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topAdjacent, const size_t& bottomAdjacent, std::vector<size_t>& trapezoids, const size_t& idP2){
 
     size_t  idSegment;
 
@@ -301,8 +301,10 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
 
     replaceTrapezoid(trapezoid,rightTrapezoid);
 
-    map[topAdjacent].setBottomRight(idTopTrapezoid);
-    map[bottomAdjacent].setTopRight(idBottomTrapezoid);
+    if(topAdjacent != std::numeric_limits<size_t>::max())
+        map[topAdjacent].setBottomRight(idTopTrapezoid);
+    if(bottomAdjacent != std::numeric_limits<size_t>::max())
+        map[bottomAdjacent].setTopRight(idBottomTrapezoid);
 
     if(topTrapezoid.getTopLeft() != std::numeric_limits<size_t>::max())
         map[topTrapezoid.getTopLeft()].setTopRight(idTopTrapezoid);
@@ -375,7 +377,8 @@ void TrapezoidalMap::mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_
     map[leftTrapezoid].setBottomRight(map[rightTrapezoid].getBottomRight());
 
     size_t index = map[rightTrapezoid].getTopRight();
-    map[index].setTopLeft(leftTrapezoid);
+    if(index != std::numeric_limits<size_t>::max())
+        map[index].setTopLeft(leftTrapezoid);
 
     if(map[rightTrapezoid].getBottomRight() != std::numeric_limits<size_t>::max())
         map[map[rightTrapezoid].getBottomRight()].setBottomLeft(leftTrapezoid);
@@ -386,44 +389,34 @@ void TrapezoidalMap::mergeTwoTrapezoids(const size_t& leftTrapezoid, const size_
  * @param trapezoids, the vector that contains all the trapezoids obtained after splits.
  */
 void TrapezoidalMap::mergeTrapezoids(std::vector<size_t>& trapezoids){
-    size_t i =1, k;
-    std::vector<size_t> indexesToUpdate;
+    size_t i =1;
 
     while( i<trapezoids.size() - 4 ){
         if(map[trapezoids[i]].getTopRight() == map[trapezoids[i]].getBottomRight()){
             mergeTwoTrapezoids(trapezoids[i], trapezoids[i + OFFISIDE_NEXT_TOP]);
             emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_TOP]);
 
-            if(trapezoids[indexesToUpdate.size()-1] == i){
-                indexesToUpdate.push_back(i + OFFISIDE_NEXT_TOP);
-                for(k=0;k<indexesToUpdate.size();k++)
-                    trapezoids[indexesToUpdate[k]] = trapezoids[i];
-            }
-            else{
-                indexesToUpdate.clear();
-                indexesToUpdate.push_back(i);
-                indexesToUpdate.push_back(i + OFFISIDE_NEXT_TOP);
-                for(k=0;k<indexesToUpdate.size();k++)
-                    trapezoids[indexesToUpdate[k]] = trapezoids[i];
-            }
+            trapezoids[i + OFFISIDE_NEXT_TOP] = trapezoids[i];
         }
         else{
             mergeTwoTrapezoids(trapezoids[i + OFFISIDE_BOTTOM], trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
             emptyIndexes.push_back(trapezoids[i + OFFISIDE_NEXT_BOTTOM]);
 
-            if(trapezoids[indexesToUpdate.size()-1] == i + OFFISIDE_BOTTOM){
-                indexesToUpdate.push_back(i + OFFISIDE_NEXT_BOTTOM);
-                for(k=0;k<indexesToUpdate.size();k++)
-                    trapezoids[indexesToUpdate[k]] = trapezoids[i + OFFISIDE_BOTTOM];
-            }
-            else{
-                indexesToUpdate.clear();
-                indexesToUpdate.push_back(i + OFFISIDE_BOTTOM);
-                indexesToUpdate.push_back(i + OFFISIDE_NEXT_BOTTOM);
-                for(k=0;k<indexesToUpdate.size();k++)
-                    trapezoids[indexesToUpdate[k]] = trapezoids[i + OFFISIDE_BOTTOM];
-            }
+            trapezoids[i + OFFISIDE_NEXT_BOTTOM] = trapezoids[i + OFFISIDE_BOTTOM];
         }
-        i+=2;
+        i+=OFFISIDE_NEXT_TOP;
     }
+}
+
+
+/**
+ * @brief Clear alla the vectors used in the trapezoidal map
+ */
+void TrapezoidalMap::clear(){
+    emptyIndexes.clear();
+    newTrapezoids.clear();
+    map.clear();
+    segments.clear();
+    points.clear();
+    pointMap.clear();
 }

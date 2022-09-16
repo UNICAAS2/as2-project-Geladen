@@ -56,6 +56,9 @@ const cg3::Color& DrawablePolygon::getColor() const{
     return color;
 }
 
+void DrawablePolygon::setColor(const cg3::Color& newColor){
+    color = newColor;
+}
 
 bool DrawablePolygon::getIsDeleted() const{
     return isDeleted;
