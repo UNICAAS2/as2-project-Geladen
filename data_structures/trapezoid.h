@@ -25,33 +25,34 @@ private:
 
     size_t idDag;
 
-
 public:
     Trapezoid(const size_t& leftp, const size_t& rightp,
               const size_t& tops, const size_t& bottoms);
-    const size_t& getLeftP() const;
-    const size_t& getRightP() const;
-    const size_t& getTopS() const;
-    const size_t& getBottomS() const;
 
-    void setLeftP(const size_t& point);
-    void setRightP(const size_t& point);
-    void setTopS(const size_t& segment);
-    void setBottomS(const size_t& segment);
+    inline const size_t& getLeftP() const;
+    inline const size_t& getRightP() const;
+    inline const size_t& getTopS() const;
+    inline const size_t& getBottomS() const;
 
-    const size_t& getTopLeft() const;
-    const size_t& getBottomLeft() const;
-    const size_t& getTopRight() const;
-    const size_t& getBottomRight() const;
+    inline void setLeftP(const size_t& point);
+    inline void setRightP(const size_t& point);
+    inline void setTopS(const size_t& segment);
+    inline void setBottomS(const size_t& segment);
 
-    void setTopLeft(const size_t& trapezoid);
-    void setBottomLeft(const size_t& trapezoid);
-    void setTopRight(const size_t& trapezoid);
-    void setBottomRight(const size_t& trapezoid);
+    inline const size_t& getTopLeft() const;
+    inline const size_t& getBottomLeft() const;
+    inline const size_t& getTopRight() const;
+    inline const size_t& getBottomRight() const;
 
-    const size_t& getIdDag() const;
-    void setIdDag(const size_t& id);
+    inline void setTopLeft(const size_t& trapezoid);
+    inline void setBottomLeft(const size_t& trapezoid);
+    inline void setTopRight(const size_t& trapezoid);
+    inline void setBottomRight(const size_t& trapezoid);
 
+    inline const size_t& getIdDag() const;
+    inline void setIdDag(const size_t& id);
 };
+
+#include "trapezoid.tpp"
 
 #endif // TRAPEZOID_H

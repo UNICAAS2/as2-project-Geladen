@@ -1,6 +1,5 @@
 #include "algorithms.h"
 
-
 namespace Algorithms {
 
 void followSegment(const TrapezoidalMap& map, const Dag& dag, const cg3::Segment2d& segment, std::vector<size_t>& trapezoids){
@@ -130,6 +129,7 @@ void updateMapAndDag(TrapezoidalMap& map,  Dag& dag, const cg3::Segment2d newSeg
         map.setNewTrapezoids(newTrapezoids);
         map.mergeTrapezoids(newTrapezoids);
 
+
         if(newTrapezoids[0] == std::numeric_limits<size_t>::max())
             addTwoInDag(map,dag,map.getTrapezoid(trapezoids[0]).getIdDag(),newTrapezoids[1],newTrapezoids[2]);
         else
@@ -146,8 +146,6 @@ void updateMapAndDag(TrapezoidalMap& map,  Dag& dag, const cg3::Segment2d newSeg
             addTwoInDag(map,dag,map.getTrapezoid(trapezoids[trapezoids.size()-1]).getIdDag(),newTrapezoids[newTrapezoids.size()-3],newTrapezoids[newTrapezoids.size()-2]);
         else
             addThreeRInDag(map,dag,map.getTrapezoid(trapezoids[trapezoids.size()-1]).getIdDag(),newTrapezoids[newTrapezoids.size()-3], newTrapezoids[newTrapezoids.size()-2],newTrapezoids[newTrapezoids.size()-1],idP2);
-
-
     }
 
     trapezoids.clear();

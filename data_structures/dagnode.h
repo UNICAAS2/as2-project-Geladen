@@ -31,8 +31,8 @@ public:
 private:
     size_t info;
     infoType type;
-    size_t rightChild;
     size_t leftChild;
+    size_t rightChild;
 };
 
 #endif // DAGNODE_H

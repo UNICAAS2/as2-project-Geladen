@@ -163,7 +163,7 @@ TrapezoidalMapManager::~TrapezoidalMapManager()
  * @param[in] segment Segment
  */
 void TrapezoidalMapManager::addSegmentToTrapezoidalMap(const cg3::Segment2d& segment)
-{
+{    
     Algorithms::updateMapAndDag(trapezoidalMap,dag,SegmentUtils::sortSegment(segment));
     trapezoidalMap.update();
 

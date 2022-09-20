@@ -3,32 +3,34 @@
 /**
  * @brief TrapezoidalMap's contructor.
  */
-TrapezoidalMap::TrapezoidalMap()
+TrapezoidalMap::TrapezoidalMap():
+    points(std::vector<cg3::Point2d>()),
+    segments(std::vector<cg3::Segment2d>()),
+    map(std::vector<Trapezoid>()),
+    emptyIndexes(std::vector<size_t>()),
+    newTrapezoids(std::vector<size_t>()),
+    pointMap(std::unordered_map<cg3::Point2d, size_t>())
 {
     size_t idP1, idP2, idP3, idP4, idTopS, idBottomS;
-    points = std::vector<cg3::Point2d>();
-    segments = std::vector<cg3::Segment2d>();
-    map = std::vector<Trapezoid>();
 
+    // points of the bounding box
     cg3::Point2d p1 = cg3::Point2d(-BOUNDINGBOX, BOUNDINGBOX);
     cg3::Point2d p2 = cg3::Point2d(BOUNDINGBOX, BOUNDINGBOX);
     cg3::Point2d p3 = cg3::Point2d(-BOUNDINGBOX, -BOUNDINGBOX);
     cg3::Point2d p4 = cg3::Point2d(BOUNDINGBOX, -BOUNDINGBOX);
-
-    cg3::Segment2d topS = cg3::Segment2d(p1, p2);
-    cg3::Segment2d bottomS = cg3::Segment2d(p3, p4);
-
     idP1 = insertPoint(p1);
     idP2 = insertPoint(p2);
     idP3 = insertPoint(p3);
     idP4 = insertPoint(p4);
 
+    // top and bottom segments of the bounding box
+    cg3::Segment2d topS = cg3::Segment2d(p1, p2);
+    cg3::Segment2d bottomS = cg3::Segment2d(p3, p4);
     idTopS = insertSegment(topS);
     idBottomS = insertSegment(bottomS);
 
-    Trapezoid boundingBox = Trapezoid(idP1,idP4,idTopS,idBottomS);
+    Trapezoid boundingBox = Trapezoid(idP1, idP4, idTopS, idBottomS);
     boundingBox.setIdDag(0);
-
     map.push_back(boundingBox);
 }
 
@@ -36,7 +38,7 @@ TrapezoidalMap::TrapezoidalMap()
  * @brief Set the newTrapezoid vector with the lastest added or modified trapezoids
  * @param trapezoids, the last added or modified trapezoids
  */
-void TrapezoidalMap::setNewTrapezoids(std::vector<size_t> trapezoids){
+void TrapezoidalMap::setNewTrapezoids(std::vector<size_t>& trapezoids){
 
     for(size_t i=0;i<trapezoids.size();i++){
         if(trapezoids[i] != std::numeric_limits<size_t>::max())
@@ -284,7 +286,6 @@ void TrapezoidalMap::splitThreeRight(const size_t& trapezoid, const size_t& topA
 
     size_t  idSegment;
 
-    //idP2 = points.size()-1;
     idSegment = segments.size()-1;
 
     Trapezoid topTrapezoid = Trapezoid(map[trapezoid].getLeftP(), idP2, map[trapezoid].getTopS(), idSegment);
@@ -337,7 +338,6 @@ void TrapezoidalMap::splitThreeLeft(const size_t& trapezoid, std::vector<size_t>
 
     size_t  idSegment;
 
-    //idP1 = points.size()-2;
     idSegment = segments.size()-1;
 
     Trapezoid topTrapezoid = Trapezoid(idP1, map[trapezoid].getRightP(), map[trapezoid].getTopS(), idSegment);

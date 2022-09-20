@@ -1,15 +1,15 @@
 #include "drawabletrapezoidalmap.h"
+#include "cg3/utilities/timer.h"
 
 /**
  * @brief DrawableTrapezodaialMap's contructor
  */
-DrawableTrapezoidalMap::DrawableTrapezoidalMap()
+DrawableTrapezoidalMap::DrawableTrapezoidalMap():
+    polygons(std::vector<DrawablePolygon>()),
+    selectedPolygon(std::numeric_limits<size_t>::max())
 {
-    TrapezoidalMap();
-    polygons = std::vector<DrawablePolygon>();
-    polygons.push_back(DrawablePolygon(points[0],points[1],points[2],points[3]));
-    selectedPolygon = std::numeric_limits<size_t>::max();
-
+    TrapezoidalMap(); // super
+    polygons.push_back(DrawablePolygon(points[0],points[1],points[2],points[3],cg3::Color(MAX_RGB,MAX_RGB,MAX_RGB)));
 }
 
 /**
@@ -22,15 +22,15 @@ void DrawableTrapezoidalMap::draw() const{
             if(i == selectedPolygon){
                 if(polygons[i].getIsDeleted() == false){
                     if(polygons[i].getTopLeftPoint() == polygons[i].getBottomLeftPoint()){
-                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }else if(polygons[i].getTopRightPoint() == polygons[i].getBottomRightPoint()){
-                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }else{
-                        cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
-                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),1,true);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }
                 }
             }
@@ -38,14 +38,14 @@ void DrawableTrapezoidalMap::draw() const{
                 if(polygons[i].getIsDeleted() == false){
                     if(polygons[i].getTopLeftPoint() == polygons[i].getBottomLeftPoint()){
                         cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getColor(),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }else if(polygons[i].getTopRightPoint() == polygons[i].getBottomRightPoint()){
                         cg3::opengl::drawTriangle2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }else{
                         cg3::opengl::drawQuad2(polygons[i].getTopLeftPoint(),polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),polygons[i].getBottomLeftPoint(),polygons[i].getColor(),1,true);
-                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(0,0,0),3);
-                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(0,0,0),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopRightPoint(),polygons[i].getBottomRightPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
+                        cg3::opengl::drawLine2(polygons[i].getTopLeftPoint(),polygons[i].getBottomLeftPoint(),cg3::Color(MIN_RGB,MIN_RGB,MIN_RGB),3);
                     }
                 }
             }
@@ -56,10 +56,16 @@ void DrawableTrapezoidalMap::draw() const{
  * @brief the vector of DrawablePolygons is updated with the new points calculated after inserting a new segment
  */
 void DrawableTrapezoidalMap::update() {
+
+    std::minstd_rand0 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<int> dist(MIN_RANGE_RGB,MAX_RGB);
+
+    cg3::Point2d topLeft,bottomLeft,topRight,bottomRight;
+
     for (size_t i=0;i<newTrapezoids.size();i++){
 
 
-        cg3::Point2d topLeft,bottomLeft,topRight,bottomRight;
         if(segments[map[newTrapezoids[i]].getTopS()].p1() != points[map[newTrapezoids[i]].getLeftP()])
             topLeft = calculatePoint(points[map[newTrapezoids[i]].getLeftP()].x(), segments[map[newTrapezoids[i]].getTopS()]);
         else
@@ -80,7 +86,7 @@ void DrawableTrapezoidalMap::update() {
         else
             bottomRight = points[map[newTrapezoids[i]].getRightP()];
 
-        DrawablePolygon polygon = DrawablePolygon(topLeft, bottomLeft, topRight, bottomRight);
+        DrawablePolygon polygon = DrawablePolygon(topLeft, bottomLeft, topRight, bottomRight,cg3::Color(dist(rng),dist(rng),dist(rng)));
 
         if(newTrapezoids[i] >= polygons.size()){
             polygons.push_back(polygon);
@@ -93,6 +99,7 @@ void DrawableTrapezoidalMap::update() {
     for (size_t i=0;i<emptyIndexes.size();i++){
         polygons[emptyIndexes[i]].setIsDeleted(true);
     }
+
     newTrapezoids.clear();
 }
 

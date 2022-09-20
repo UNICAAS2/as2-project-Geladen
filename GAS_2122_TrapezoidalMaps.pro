@@ -45,10 +45,12 @@ SOURCES +=  \
     data_structures/dagnode.cpp \
     data_structures/segment_intersection_checker.cpp \
     data_structures/trapezoid.cpp \
+    data_structures/trapezoid.tpp \
     data_structures/trapezoidalmap.cpp \
     data_structures/trapezoidalmap_dataset.cpp \
     drawables/drawable_trapezoidalmap_dataset.cpp \
     drawables/drawablepolygon.cpp \
+    drawables/drawablepolygon.tpp \
     drawables/drawabletrapezoidalmap.cpp \
     main.cpp \
     managers/trapezoidalmap_manager.cpp \

@@ -5,8 +5,6 @@
 #include <cg3/utilities/color.h>
 
 
-#include <random>
-
 
 /**
   * @brief this class represents the polygon that will be used in the graphic part. Each trapezoid is made up of four points and a flag
@@ -18,22 +16,23 @@ public:
     DrawablePolygon(const cg3::Point2d& topLeft,
                     const cg3::Point2d& bottomLeft,
                     const cg3::Point2d& topRight,
-                    const cg3::Point2d& bottomRight);
+                    const cg3::Point2d& bottomRight,
+                    const cg3::Color& randColor);
 
-    const cg3::Point2d& getTopLeftPoint() const;
-    const cg3::Point2d& getBottomLeftPoint() const;
-    const cg3::Point2d& getTopRightPoint() const;
-    const cg3::Point2d& getBottomRightPoint() const;
-    const cg3::Color& getColor() const;
-    bool getIsDeleted() const;
+    inline const cg3::Point2d& getTopLeftPoint() const;
+    inline const cg3::Point2d& getBottomLeftPoint() const;
+    inline const cg3::Point2d& getTopRightPoint() const;
+    inline const cg3::Point2d& getBottomRightPoint() const;
+    inline const cg3::Color& getColor() const;
+    inline bool getIsDeleted() const;
 
 
-    void setTopLeftPoint(const cg3::Point2d& point);
-    void setBottomLeftPoint(const cg3::Point2d& point);
-    void setTopRightPoint(const cg3::Point2d& point);
-    void setBottomRightPoint(const cg3::Point2d& point);
-    void setColor(const cg3::Color& newColor);
-    void setIsDeleted(const bool& flag);
+    inline void setTopLeftPoint(const cg3::Point2d& point);
+    inline void setBottomLeftPoint(const cg3::Point2d& point);
+    inline void setTopRightPoint(const cg3::Point2d& point);
+    inline void setBottomRightPoint(const cg3::Point2d& point);
+    inline void setColor(const cg3::Color& newColor);
+    inline void setIsDeleted(const bool& flag);
 
 
 private:
@@ -44,5 +43,7 @@ private:
     cg3::Color color;
     bool isDeleted;
 };
+
+#include "drawablepolygon.tpp"
 
 #endif // DRAWABLEPOLYGON_H

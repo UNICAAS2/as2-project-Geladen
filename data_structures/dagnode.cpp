@@ -5,11 +5,12 @@
  * @param idInfo, the id of the element
  * @param nodeType, the type of the node
  */
-DagNode::DagNode(const size_t& idInfo, const infoType& nodeType) {
-    info = idInfo;
-    type = nodeType;
-    leftChild = std::numeric_limits<size_t>::max();
-    rightChild = std::numeric_limits<size_t>::max();
+DagNode::DagNode(const size_t& idInfo, const infoType& nodeType):
+    info(idInfo),
+    type(nodeType),
+    leftChild(std::numeric_limits<size_t>::max()),
+    rightChild(std::numeric_limits<size_t>::max())
+{
 }
 
 /**
@@ -19,11 +20,12 @@ DagNode::DagNode(const size_t& idInfo, const infoType& nodeType) {
  * @paragraph idLeftChild, the id of the left child of the node
  * @paragraph idRightChild, the id of the right child of the node
  */
-DagNode::DagNode(const size_t& idInfo, const infoType& nodeType, const size_t& idLeftChild, const size_t& idRightChild) {
-    info = idInfo;
-    type = nodeType;
-    leftChild = idLeftChild;
-    rightChild = idRightChild;
+DagNode::DagNode(const size_t& idInfo, const infoType& nodeType, const size_t& idLeftChild, const size_t& idRightChild):
+    info(idInfo),
+    type(nodeType),
+    leftChild(idLeftChild),
+    rightChild(idRightChild)
+{
 }
 
 
