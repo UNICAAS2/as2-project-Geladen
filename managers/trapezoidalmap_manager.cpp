@@ -166,6 +166,7 @@ void TrapezoidalMapManager::addSegmentToTrapezoidalMap(const cg3::Segment2d& seg
 {    
     Algorithms::updateMapAndDag(trapezoidalMap,dag,SegmentUtils::sortSegment(segment));
     trapezoidalMap.update();
+    trapezoidalMap.setSelectedPolygon(std::numeric_limits<size_t>::max());
 
     //---------------------------------------------------------------------
     //Execute the incremental step to add a segment to your output TrapezoidalMap data

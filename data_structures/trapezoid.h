@@ -6,14 +6,14 @@
 
 /**
   * @brief This class represents the trapezoids that will compose the trapzoidal. A trapezoid is composed by two points leftP and rightP,
-  * two segments topS and topS, each trapezoid can have zero to four neighbors topLeft bottomLeft topRoght bottomRight. All the attributes
-  * that make up the class are of type size_t which represent the indices of the elements stored in the TrapezoidalMap.
-  * In addition, the class contains a index, idDag, representing the position of the trapezoid in the dag.
+  * two segments topS and topS, each trapezoid can have zero to four adjacent trapezoids topLeft bottomLeft topRoght bottomRight.
+  * All the attributes that make up the class are of type size_t which represent the indices of the elements stored in the TrapezoidalMap.
+  * In addition, the class contains an index, idDag, representing the position of the trapezoid in the dag.
   */
-class Trapezoid
-{
+class Trapezoid {
 
 private:
+
     size_t leftP;
     size_t rightP;
     size_t topS;
@@ -22,12 +22,11 @@ private:
     size_t bottomLeft; // adjacent trapezoid in bottom left
     size_t topRight; // adjacent trapezoid in top right
     size_t bottomRight; // adjacent trapezoid in bottom right
-
     size_t idDag;
 
 public:
-    Trapezoid(const size_t& leftp, const size_t& rightp,
-              const size_t& tops, const size_t& bottoms);
+
+    Trapezoid(const size_t& leftp, const size_t& rightp, const size_t& tops, const size_t& bottoms);
 
     inline const size_t& getLeftP() const;
     inline const size_t& getRightP() const;

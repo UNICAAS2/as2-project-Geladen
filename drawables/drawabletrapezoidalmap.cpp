@@ -1,5 +1,4 @@
 #include "drawabletrapezoidalmap.h"
-#include "cg3/utilities/timer.h"
 
 /**
  * @brief DrawableTrapezodaialMap's contructor
@@ -9,11 +8,12 @@ DrawableTrapezoidalMap::DrawableTrapezoidalMap():
     selectedPolygon(std::numeric_limits<size_t>::max())
 {
     TrapezoidalMap(); // super
+    //Push the bounding box
     polygons.push_back(DrawablePolygon(points[0],points[1],points[2],points[3],cg3::Color(MAX_RGB,MAX_RGB,MAX_RGB)));
 }
 
 /**
- * @brief draw trapezoids and vertical lines
+ * @brief Draw trapezoids and vertical lines
  */
 void DrawableTrapezoidalMap::draw() const{
 
@@ -53,19 +53,19 @@ void DrawableTrapezoidalMap::draw() const{
 }
 
 /**
- * @brief the vector of DrawablePolygons is updated with the new points calculated after inserting a new segment
+ * @brief The vector of DrawablePolygons is updated with the new points calculated after inserting a new segment
  */
 void DrawableTrapezoidalMap::update() {
 
+    //Random generator
     std::minstd_rand0 rng;
     rng.seed(std::random_device()());
     std::uniform_int_distribution<int> dist(MIN_RANGE_RGB,MAX_RGB);
 
     cg3::Point2d topLeft,bottomLeft,topRight,bottomRight;
 
+    //Calculate the points for each trapezoid
     for (size_t i=0;i<newTrapezoids.size();i++){
-
-
         if(segments[map[newTrapezoids[i]].getTopS()].p1() != points[map[newTrapezoids[i]].getLeftP()])
             topLeft = calculatePoint(points[map[newTrapezoids[i]].getLeftP()].x(), segments[map[newTrapezoids[i]].getTopS()]);
         else
@@ -88,6 +88,7 @@ void DrawableTrapezoidalMap::update() {
 
         DrawablePolygon polygon = DrawablePolygon(topLeft, bottomLeft, topRight, bottomRight,cg3::Color(dist(rng),dist(rng),dist(rng)));
 
+        //Insert the new polygon in the vector
         if(newTrapezoids[i] >= polygons.size()){
             polygons.push_back(polygon);
         }
@@ -96,6 +97,7 @@ void DrawableTrapezoidalMap::update() {
         }
     }
 
+    //Update deleted trapezoids
     for (size_t i=0;i<emptyIndexes.size();i++){
         polygons[emptyIndexes[i]].setIsDeleted(true);
     }
@@ -115,25 +117,23 @@ double DrawableTrapezoidalMap::sceneRadius() const{
 }
 
 /**
- * @brief truncates the value to 6 decimal digits
+ * @brief Truncates the value to 6 decimal digits
  * @param x, the value to be rounded
  */
 double DrawableTrapezoidalMap::roundValue(const double x) const {
-    double n =  (static_cast<long long int> (x*10*6)) /(10*6);
-    return n;
+    return (static_cast<long long int> (x*10*6))/(10*6);
 }
 
 /**
- * @brief find the y obtained from the intersection of a segment and a x coordinate
+ * @brief Find the y obtained from the intersection of a segment and a x coordinate
  * @param x, the x of which to find the y
  * @param segment, the segment of which to find the y
  */
 const cg3::Point2d DrawableTrapezoidalMap::calculatePoint(const double x, const cg3::Segment2d& segment) const{
-    double y;
     cg3::Point2d p1 = segment.p1();
     cg3::Point2d p2 = segment.p2();
-    y = (x-p1.x())/(p2.x()-p1.x()) * (p2.y()-p1.y()) +p1.y();
-
+    double y = (x-p1.x())/(p2.x()-p1.x()) * (p2.y()-p1.y()) +p1.y();
+    //roundValue is necessary because if two points are too close they can cause crashes
     return cg3::Point2d(roundValue(x),roundValue(y));
 }
 
@@ -146,7 +146,7 @@ void DrawableTrapezoidalMap::setSelectedPolygon(const size_t idPolygon){
 }
 
 /**
- * @brief clear the memory used in the trapwzoidal map
+ * @brief Clear the memory used in the trapwzoidal map
  */
 void DrawableTrapezoidalMap::clear(){
     polygons.clear();

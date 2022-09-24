@@ -1,5 +1,4 @@
 #include "drawablepolygon.h"
-#include "cg3/utilities/timer.h"
 
 /**
  * @brief DrawableTrapezoid's constructor.

@@ -3,7 +3,7 @@
 namespace SegmentUtils {
 
 /**
- * @brief If the x coordinate of p2 is greater than the x coordinate of p1, create a new segment with the point reversed
+ * @brief If the x coordinate of p2 is greater than the x coordinate of p1, create a new segment with the swapped points
  * @param segment, the segment to check
  * @return the segment sorted by the x coordinate
  */

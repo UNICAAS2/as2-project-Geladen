@@ -14,6 +14,7 @@
 #include "drawables/drawabletrapezoidalmap.h"
 #include "data_structures/dag.h"
 #include "utils/segmentutils.h"
+#include "algorithms/algorithms.h"
 
 namespace Ui {
     class TrapezoidalMapManager;

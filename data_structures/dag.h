@@ -6,17 +6,21 @@
 /**
   * @brief This class represents the Dag structure. The structure is composed by a vectore of DagNode.
   */
-class Dag
-{
+class Dag {
+
 private:
+
     std::vector<DagNode> dag;
 
 public:
+
     Dag();
+
     size_t insertNode(const DagNode& newNode);
-    const DagNode& getNode(const size_t& node) const;
-    const std::vector<DagNode>& getDag() const;
     void replaceNode(const size_t& oldNode, const DagNode& newNode);
+    const DagNode& getNode(const size_t& node) const;  
+
+    const std::vector<DagNode>& getDag() const;
     void clear();
 };
 

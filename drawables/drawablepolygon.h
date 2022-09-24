@@ -7,12 +7,22 @@
 
 
 /**
-  * @brief this class represents the polygon that will be used in the graphic part. Each trapezoid is made up of four points and a flag
-  * that indicates whether the polygon is a trapezoid or a triangle
+  * @brief this class represents the polygon that will be used in the graphic part. Each trapezoid is made up
+  * of four points and a flag that indicates whether the polygon is a trapezoid or a triangle
   */
-class DrawablePolygon
-{
+class DrawablePolygon {
+
+private:
+
+    cg3::Point2d topLeftPoint;
+    cg3::Point2d bottomLeftPoint;
+    cg3::Point2d topRightPoint;
+    cg3::Point2d bottomRightPoint;
+    cg3::Color color;
+    bool isDeleted;
+
 public:
+
     DrawablePolygon(const cg3::Point2d& topLeft,
                     const cg3::Point2d& bottomLeft,
                     const cg3::Point2d& topRight,
@@ -33,15 +43,6 @@ public:
     inline void setBottomRightPoint(const cg3::Point2d& point);
     inline void setColor(const cg3::Color& newColor);
     inline void setIsDeleted(const bool& flag);
-
-
-private:
-    cg3::Point2d topLeftPoint;
-    cg3::Point2d bottomLeftPoint;
-    cg3::Point2d topRightPoint;
-    cg3::Point2d bottomRightPoint;
-    cg3::Color color;
-    bool isDeleted;
 };
 
 #include "drawablepolygon.tpp"
